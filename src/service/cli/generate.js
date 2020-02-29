@@ -20,7 +20,7 @@ const generateOffers = (count) => {
   return Array.from({length: count}, () => ({
     "type": Object.values(OfferType)[getRandomInteger(0, 1)],
     "title": shuffle(TITLES)[getRandomInteger(0, TITLES.length - 1)],
-    "description": shuffle(DESCRIPTIONS).slice(0, getRandomInteger(0, DESCRIPTIONS_MAX_COUNT)).join(` `),
+    "description": shuffle(DESCRIPTIONS).slice(0, getRandomInteger(1, DESCRIPTIONS_MAX_COUNT)).join(` `),
     "sum": getRandomInteger(PriceLimit.MIN, PriceLimit.MAX),
     "picture": shuffle(PICTURES)[getRandomInteger(0, PICTURES.length - 1)],
     "category": shuffle(categories).slice(0, [getRandomInteger(1, categories.length - 1)])

@@ -12,7 +12,7 @@ const TITLES = [
   `Куплю детские санки.`
 ];
 
-const PICTURES = Array(16).fill(``).map((it, i) => `item${i < 10 ? `0${i + 1}` : `${i + 1}`}.jpg`);
+const PICTURES = Array.from({length: 16}, (it, i) => `item${i < 9 ? `0${i + 1}` : `${i + 1}`}.jpg`);
 
 const DESCRIPTIONS = [
   `Товар в отличном состоянии.`,
