@@ -1,7 +1,6 @@
 'use strict';
-const fs = require(`fs`);
+const {writeFile} = require(`fs`).promises;
 const chalk = require(`chalk`);
-const util = require(`util`);
 
 const {getRandomInteger, shuffle} = require(`../utils/utils`);
 const {ExitCode} = require(`../const`);
@@ -31,8 +30,6 @@ const generateOffers = (count) => {
 };
 
 const createMockFile = async (path, content) => {
-  const writeFile = util.promisify(fs.writeFile);
-
   try {
     await writeFile(path, content);
     console.info(chalk.green(`Operation success. File created: ${path}`));
