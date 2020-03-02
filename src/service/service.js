@@ -32,9 +32,9 @@ const run = async () => {
     Cli[DEFAULT_COMMAND].run();
   } else if (userCommand === `--generate`) {
     const {count} = await enterCount();
-    Cli[userCommand].run(count);
+    await Cli[userCommand].run(count);
   } else {
-    Cli[userCommand].run();
+    await Cli[userCommand].run();
   }
 };
 

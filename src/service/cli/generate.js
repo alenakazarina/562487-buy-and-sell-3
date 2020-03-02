@@ -1,57 +1,47 @@
 'use strict';
-const {writeFile} = require(`fs`).promises;
+const {readdir} = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {DEFAULT_COUNT, MAX_INPUT_COUNT} = require(`../const`);
+const {getRandomInteger, shuffle, readData, writeData} = require(`../utils/utils`);
+const {PICTURES, DESCRIPTIONS_MAX_COUNT, OfferType, PriceLimit} = require(`../mock/mock`);
 
-const {getRandomInteger, shuffle} = require(`../utils/utils`);
-const {ExitCode} = require(`../const`);
-const {
-  TITLES,
-  PICTURES,
-  DESCRIPTIONS,
-  DESCRIPTIONS_MAX_COUNT,
-  OfferType,
-  PriceLimit,
-  Category
-} = require(`../mock/mock`);
+const DATA_PATH = {
+  IN: `./data/`,
+  OUT: `./mocks.json`,
+};
 
-const DEFAULT_COUNT = 1;
-const MAX_INPUT_COUNT = 1000;
+const getPath = (filePath) => {
+  return `${DATA_PATH.IN}${filePath}`;
+};
 
-const generateOffers = (count) => {
-  const categories = Object.values(Category);
+const generateOffers = async (count) => {
+  const files = await readdir(DATA_PATH.IN);
+  const [categories, sentences, titles] = await Promise.all(
+      files.map((file) => readData(getPath(file)))
+  );
+
   return Array.from({length: count}, () => ({
     "type": Object.values(OfferType)[getRandomInteger(0, 1)],
-    "title": shuffle(TITLES)[getRandomInteger(0, TITLES.length - 1)],
-    "description": shuffle(DESCRIPTIONS).slice(0, getRandomInteger(1, DESCRIPTIONS_MAX_COUNT)).join(` `),
+    "title": shuffle(titles)[getRandomInteger(0, titles.length - 1)],
+    "description": shuffle(sentences).slice(0, getRandomInteger(1, DESCRIPTIONS_MAX_COUNT)).join(` `),
     "sum": getRandomInteger(PriceLimit.MIN, PriceLimit.MAX),
     "picture": shuffle(PICTURES)[getRandomInteger(0, PICTURES.length - 1)],
     "category": shuffle(categories).slice(0, [getRandomInteger(1, categories.length - 1)])
   }));
 };
 
-const createMockFile = async (path, content) => {
-  try {
-    await writeFile(path, content);
-    console.info(chalk.green(`Operation success. File created: ${path}`));
-  } catch (error) {
-    console.error(chalk.red(`Can't write data to file...`));
-    process.exit(ExitCode.ERROR);
-  }
-};
-
 module.exports = {
   name: `--generate`,
-  run: (count) => {
+  run: async (count) => {
     const offersCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
     if (count > MAX_INPUT_COUNT) {
       console.error(chalk.red(`Не больше 1000 объявлений`));
-      process.exit(ExitCode.ERROR);
+      process.exit(1);
     }
 
-    const mockFilePath = `./mocks.json`;
-    const content = JSON.stringify(generateOffers(offersCount));
-    createMockFile(mockFilePath, content);
+    const offers = await generateOffers(offersCount);
+    const content = JSON.stringify(offers);
+    await writeData(DATA_PATH.OUT, content);
   }
 };
-
