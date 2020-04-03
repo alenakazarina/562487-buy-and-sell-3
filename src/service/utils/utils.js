@@ -18,21 +18,23 @@ const getRandomInteger = (min, max) => {
 };
 
 const readData = async (filePath) => {
-  return readFile(filePath, `utf-8`)
-    .then((data) => data.split(`\n`).filter((item) => item !== ``))
-    .catch(() => {
-      console.error(chalk.red(`Can't read data from file ${filePath}`));
-      process.exit(1);
-    });
+  try {
+    const data = await readFile(filePath, `utf-8`);
+    return data.split(`\n`).filter((item) => item !== ``);
+  } catch (err) {
+    console.error(chalk.red(`Can't read data from file ${filePath}`));
+    return process.exit(1);
+  }
 };
 
 const writeData = async (path, content) => {
-  return writeFile(path, content)
-    .then(() => console.info(chalk.green(`Operation success. File created: ${path}`)))
-    .catch(() => {
-      console.error(chalk.red(`Can't write data to file...`));
-      process.exit(1);
-    });
+  try {
+    await writeFile(path, content);
+    console.info(chalk.green(`Operation success. File created: ${path}`));
+  } catch (err) {
+    console.error(chalk.red(`Can't write data to file...`));
+    process.exit(1);
+  }
 };
 
 module.exports = {

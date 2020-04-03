@@ -1,25 +1,14 @@
 'use strict';
-const {readdir} = require(`fs`).promises;
 const chalk = require(`chalk`);
-const {DEFAULT_COUNT, MAX_INPUT_COUNT} = require(`../const`);
+const {DEFAULT_COUNT, MAX_INPUT_COUNT, Commands, DataPath, DataFiles} = require(`../const`);
 const {getRandomInteger, shuffle, readData, writeData} = require(`../utils/utils`);
 const {PICTURES, DESCRIPTIONS_MAX_COUNT, OfferType, PriceLimit} = require(`../mock/mock`);
 
-const DATA_PATH = {
-  IN: `./data/`,
-  OUT: `./mocks.json`,
-};
-
 const getPath = (filePath) => {
-  return `${DATA_PATH.IN}${filePath}`;
+  return `${DataPath.IN}${filePath}`;
 };
 
-const generateOffers = async (count) => {
-  const files = await readdir(DATA_PATH.IN);
-  const [categories, sentences, titles] = await Promise.all(
-      files.map((file) => readData(getPath(file)))
-  );
-
+const generateOffers = (categories, sentences, titles, count) => {
   return Array.from({length: count}, () => ({
     "type": Object.values(OfferType)[getRandomInteger(0, 1)],
     "title": shuffle(titles)[getRandomInteger(0, titles.length - 1)],
@@ -31,7 +20,7 @@ const generateOffers = async (count) => {
 };
 
 module.exports = {
-  name: `--generate`,
+  name: Commands.GENERATE,
   run: async (count) => {
     const offersCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
@@ -40,8 +29,11 @@ module.exports = {
       process.exit(1);
     }
 
-    const offers = await generateOffers(offersCount);
-    const content = JSON.stringify(offers);
-    await writeData(DATA_PATH.OUT, content);
+    const categories = await readData(getPath(DataFiles.CATEGORIES));
+    const sentences = await readData(getPath(DataFiles.SENTENCES));
+    const titles = await readData(getPath(DataFiles.TITLES));
+    const content = JSON.stringify(generateOffers(categories, sentences, titles, offersCount));
+
+    await writeData(DataPath.OUT, content);
   }
 };
