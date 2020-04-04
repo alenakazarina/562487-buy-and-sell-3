@@ -2,7 +2,7 @@
 const chalk = require(`chalk`);
 const http = require(`http`);
 const fs = require(`fs`).promises;
-const {Commands, HttpCode, DataPath, DEFAULT_PORT} = require(`../const`);
+const {Commands, HttpCode, DataPath, InputData} = require(`../const`);
 
 const sendResponse = (res, statusCode, message) => {
   const template = `
@@ -46,7 +46,7 @@ const onClientRequest = async (req, res) => {
 module.exports = {
   name: Commands.SERVER,
   run: (count) => {
-    const port = Number.parseInt(count, 10) || DEFAULT_PORT;
+    const port = Number.parseInt(count, 10) || InputData.defaultPort;
     http.createServer(onClientRequest)
       .listen(port)
       .on(`listening`, (err) => {

@@ -1,7 +1,21 @@
 'use strict';
-const DEFAULT_COUNT = 1;
-const MAX_INPUT_COUNT = 1000;
-const DEFAULT_PORT = 3000;
+const InputData = {
+  defaultCount: 1,
+  maxCount: 1000,
+  defaultPort: 3000
+};
+
+const OffersData = {
+  maxTextLength: 5,
+  priceLimit: {
+    min: 1000,
+    max: 10000
+  },
+  type: {
+    offer: `offer`,
+    sale: `sale`
+  }
+};
 
 const Commands = {
   VERSION: `--version`,
@@ -30,9 +44,8 @@ const DataFiles = {
 };
 
 module.exports = {
-  DEFAULT_COUNT,
-  MAX_INPUT_COUNT,
-  DEFAULT_PORT,
+  InputData,
+  OffersData,
   Commands,
   HttpCode,
   DataPath,

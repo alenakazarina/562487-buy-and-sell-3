@@ -1,20 +1,10 @@
 'use strict';
 const {writeFile, readFile} = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {DataPath} = require(`../const`);
 
-const shuffle = (items) => {
-  let shuffledArray = items.slice();
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * i);
-    [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
-  }
-  return shuffledArray;
-};
-
-const getRandomInteger = (min, max) => {
-  const minInt = Math.ceil(min);
-  const maxInt = Math.floor(max);
-  return Math.floor(Math.random() * (maxInt - minInt + 1)) + minInt;
+const getPath = (filePath) => {
+  return `${DataPath.IN}${filePath}`;
 };
 
 const readData = async (filePath) => {
@@ -38,8 +28,7 @@ const writeData = async (path, content) => {
 };
 
 module.exports = {
-  shuffle,
-  getRandomInteger,
+  getPath,
   readData,
   writeData
 };
