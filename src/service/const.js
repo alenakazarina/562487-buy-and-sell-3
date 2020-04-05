@@ -1,19 +1,19 @@
 'use strict';
 const InputData = {
-  defaultCount: 1,
-  maxCount: 1000,
-  defaultPort: 3000
+  DEFAULT_COUNT: 1,
+  MAX_COUNT: 1000,
+  DEFAULT_PORT: 3000
 };
 
 const OffersData = {
-  maxTextLength: 5,
-  priceLimit: {
-    min: 1000,
-    max: 10000
+  MAX_TEXT_LENGHT: 5,
+  PRICE_LIMIT: {
+    MIN: 1000,
+    MAX: 10000
   },
-  type: {
-    offer: `offer`,
-    sale: `sale`
+  TYPE: {
+    OFFER: `offer`,
+    SALE: `sale`
   }
 };
 

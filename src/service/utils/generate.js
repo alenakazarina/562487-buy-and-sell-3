@@ -15,10 +15,24 @@ const getRandomInteger = (min, max) => {
   return Math.floor(Math.random() * (maxInt - minInt + 1)) + minInt;
 };
 
+const getRandomItem = (items) => {
+  return shuffle(items)[getRandomInteger(0, items.length - 1)];
+};
+
+const getRandomItems = (items) => {
+  return shuffle(items).slice(0, [getRandomInteger(1, items.length - 1)]);
+};
+
+const getRandomText = (items, maxCount) => {
+  return shuffle(items).slice(0, getRandomInteger(1, maxCount)).join(` `);
+};
+
 const getPictures = () => Array.from({length: 16}, (it, i) => `item${i < 9 ? `0${i + 1}` : `${i + 1}`}.jpg`);
 
 module.exports = {
-  shuffle,
   getRandomInteger,
-  getPictures
+  getPictures,
+  getRandomItem,
+  getRandomItems,
+  getRandomText
 };

@@ -46,7 +46,7 @@ const onClientRequest = async (req, res) => {
 module.exports = {
   name: Commands.SERVER,
   run: (count) => {
-    const port = Number.parseInt(count, 10) || InputData.defaultPort;
+    const port = Number.parseInt(count, 10) || InputData.DEFAULT_PORT;
     http.createServer(onClientRequest)
       .listen(port)
       .on(`listening`, (err) => {
