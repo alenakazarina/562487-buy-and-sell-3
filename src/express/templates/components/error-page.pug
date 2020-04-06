@@ -1,11 +1,11 @@
 doctype html
 html.html-not-found(lang='ru')
-  include head.pug
+  include head
   body.body-not-found
     main
       section.error
-        h1.error__title= errorStatus
-        h2.error__subtitle= errorMessage
+        h1.error__title= statusCode
+        h2.error__subtitle= statusText
         ul.error__list
           li.error__item
             a(href='sign-up.html') Вход и регистрация
@@ -19,4 +19,4 @@ html.html-not-found(lang='ru')
           .search__close-btn
         a.error__logo.logo(href='main.html')
           img(src='/img/logo.svg' width='179' height='34' alt='Логотип Куплю Продам')
-    include scripts.pug
+    include scripts

@@ -1,0 +1,9 @@
+if comments.length
+  .ticket__comments-list
+    ul.comments-list
+      each comment in comments
+        li
+          include comment-card
+else
+  .ticket__message
+    p У этой публикации еще нет ни одного комментария.

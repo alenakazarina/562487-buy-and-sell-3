@@ -1,16 +1,28 @@
-extends ./components/layout.pug
+extends ./components/layout
 
 block content
-  include ./components/categories-list.pug
-  section.tickets-list
-    h2.visually-hidden Самые новые предложения
-    .tickets-list__wrapper
-      .tickets-list__header
-        p.tickets-list__title Самое свежее
-      include ./components/tickets-list.pug
-  section.tickets-list
-    h2.visually-hidden Самые обсуждаемые предложения
-    .tickets-list__wrapper
-      .tickets-list__header
-        p.tickets-list__title Самые обсуждаемые
-      include ./components/tickets-list.pug
+  if offers.length
+    include ./components/categories
+    section.tickets-list
+      h2.visually-hidden Самые новые предложения
+      .tickets-list__wrapper
+        .tickets-list__header
+          p.tickets-list__title Самое свежее
+        ul
+          each offer, i in offers
+            li.tickets-list__item
+              include ./components/ticket-card
+    section.tickets-list
+      h2.visually-hidden Самые обсуждаемые предложения
+      .tickets-list__wrapper
+        .tickets-list__header
+          p.tickets-list__title Самые обсуждаемые
+        ul
+          each offer, i in offers.slice(0, 4)
+            li.tickets-list__item
+              include ./components/ticket-card
+  else
+    .message
+      .message__text
+        p На сайте еще не опубликовано ни одного объявления.
+      a.message__link.btn.btn--big(href='#') Вход и регистрация

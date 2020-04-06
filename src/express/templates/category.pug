@@ -1,14 +1,19 @@
-extends ./components/layout.pug
+extends ./components/layout
 
 block content
-  include ./components/categories-list.pug
+  section.categories-list
+    h1.visually-hidden Сервис объявлений "Куплю - продам"
+    ul.categories-list__wrapper
+      each category, i in categories
+        li.categories-list__item
+          include ./components/category-tile.pug
   section.tickets-list
-    h2.visually-hidden Предложения из категории электроника
+    h2.visually-hidden= `Предложения из категории ${activeCategory.title}`
     .tickets-list__wrapper
       .tickets-list__header
-        p.tickets-list__title Электроника <b class="js-qty"> 62 </b>
+        p.tickets-list__title #{activeCategory.title} <b class="js-qty"> #{activeCategory.count} </b>
       ul
         each offer, i in offers
           li.tickets-list__item
-            include ./components/ticket-card.pug
-      include components/tickets-list-pagination.pug
+            include ./components/ticket-card
+      include components/tickets-list-pagination

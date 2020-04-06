@@ -9,7 +9,11 @@ form.ticket-form__form.form(action='#' method='post' enctype='multipart/form-dat
   .ticket-form__content
     .ticket-form__row
       .form__field
-        input#ticket-name.js-field(type='text' name='ticket-name' required)
+        input#ticket-name.js-field(
+          type='text'
+          name='ticket-name'
+          required
+        )
         label(for='ticket-name') Название
         span Обязательное поле
     .ticket-form__row

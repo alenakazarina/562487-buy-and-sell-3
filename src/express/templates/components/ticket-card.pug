@@ -3,9 +3,9 @@ div(class=`ticket-card ticket-card--color${cardOffer.id}`)
   .ticket-card__img
     img(src= offer.picture srcset= cardOffer.pictureSrcset alt='Изображение товара')
   .ticket-card__info
-    span.ticket-card__label= offer.type === `sale` ? `ПРОДАМ` : `КУПЛЮ`
+    span.ticket-card__label= offer.type === `sale` ? `Продам` : `Куплю`
     .ticket-card__categories
-      a(href='#')= cardOffer.category.slice().toUpperCase()
+      a(href='#')= cardOffer.category.join(`, `)
     .ticket-card__header
       h3.ticket-card__title
         a(href='#')= cardOffer.title
@@ -14,6 +14,5 @@ div(class=`ticket-card ticket-card--color${cardOffer.id}`)
         |  ₽
     .ticket-card__desc
       p= cardOffer.description
-  if (page === `my`) {
+  if page === `my`
     button.ticket-card__del.js-delete(type='button') Удалить
-  }

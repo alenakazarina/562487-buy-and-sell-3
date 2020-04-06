@@ -1,6 +1,10 @@
 .ticket-form__avatar-container.js-preview-container.uploaded
   .ticket-form__avatar.js-preview
-    img(src='/img/item02.jpg' srcset='/img/item02@2x.jpg 2x' alt)
+    img(
+      src= offer.picture
+      srcset= offer.srcset
+      alt
+    )
   .ticket-form__field-avatar
     input#avatar.visually-hidden.js-file-field(type='file' name='avatar')
     label(for='avatar')

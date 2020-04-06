@@ -1,28 +1,33 @@
 .ticket__content
-  .ticket__img
-    if (offer.picture) {
-      img(src= offer.picture srcset= offer.srcset alt="Изображение товара")
-    }
+  if offer.picture
+    .ticket__img
+      img(
+        src= offer.picture
+        srcset= offer.srcset
+        alt="Изображение товара"
+      )
+  else
+    .ticket__img
   .ticket__info
     h2.ticket__title= offer.title
     .ticket__header
       p.ticket__price
-        span.js-sum= offer.price
+        span.js-sum= offer.sum
         |  ₽
-      p.ticket__action= offer.type === `sale` ? `ПРОДАМ` : `КУПЛЮ`
+      p.ticket__action= offer.type === `sale` ? `Продам` : `Куплю`
     .ticket__desc
       p= offer.description
     .ticket__data
       p
         b Дата добавления:
-        span 20 ноября 2019
+        span= ` 20 ноября 2019`
       p
         b Автор:
-        a(href='#') Денис Шкатулкин
+        a(href='#')= ` Денис Шкатулкин`
       p
         b Контакты:
-        a(href='mailto:shkatulkin@ya.ru') shkatulkin@ya.ru
+        a(href='mailto:shkatulkin@ya.ru')= ` shkatulkin@ya.ru`
     ul.ticket__tags
       each category in categories
         li
-          include category-tile.pug
+          include category-tile

@@ -1,22 +1,24 @@
 'use strict';
 const {Router} = require(`express`);
-const {cardsOffers} = require(`../data`);
+const {cardsOffers, offerComments, PageContent} = require(`./data`);
 
 const myRouter = new Router();
 
 myRouter.get(`/`, (req, res) => {
-  const pageContent = {
+  const myPageContent = Object.assign({}, PageContent, {
     page: `my`,
-    title: `Куплю Продам`,
-    description: `Доска объявлений — современный веб-сайт, упрощающий продажу или покупку абсолютно любых вещей.`,
     offers: cardsOffers
-  };
-
-  res.render(`my-tickets`, pageContent);
+  });
+  res.render(`my-tickets`, myPageContent);
 });
 
 myRouter.get(`/comments`, (req, res) => {
-  res.send(`/my/comments`);
+  const commentsPagecontent = Object.assign({}, PageContent, {
+    page: `comments`,
+    offers: cardsOffers.slice(0, 2),
+    comments: offerComments
+  });
+  res.render(`comments`, commentsPagecontent);
 });
 
 module.exports = {

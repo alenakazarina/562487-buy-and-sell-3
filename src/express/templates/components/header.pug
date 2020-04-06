@@ -1,15 +1,19 @@
-header.header.header--logged
+header(class=`header ${isAuth ? `header--logged` : ``}`)
   .header__wrapper
     a.header__logo.logo(href='main.html')
       img(src='/img/logo.svg' width='179' height='34' alt='Логотип Куплю Продам')
     nav.header__user-menu
       ul.header__list
-        li.header__item
+        li(class=`header__item ${page === `my` ? `header__item--active` : ``}`)
           a(href='my-tickets.html') Публикации
-        li.header__item
+        li(class=`header__item ${page === `comments` ? `header__item--active` : ``}`)
           a(href='comments.html') Комментарии
     form.search(method='get' action='#' autocomplete='off')
-      input(type='search' name='search' placeholder='Поиск' aria-label='Поиск')
+      input(type='search' name='search'
+        placeholder='Поиск'
+        aria-label='Поиск'
+        value= searchedValue ? searchedValue : ``
+      )
       .search__icon
       .search__close-btn
     a.header__avatar.avatar(href='#')

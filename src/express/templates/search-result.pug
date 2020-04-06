@@ -1,16 +1,23 @@
-extends ./components/layout.pug
+extends ./components/layout
 
 block content
   section.search-results
     h1.visually-hidden Результаты поиска
     .search-results__wrapper
-      p.search-results__label
-        | Найдено
-        span.js-results 2 публикации
-      ul.search-results__list
-        each offer, i in offers
-          li.search-results__item
-            include ./components/ticket-card.pug
+      if searchedOffers.length
+        p.search-results__label
+          | Найдено
+          span.js-results= ` ${searchedOffers.length} публикации`
+        ul.search-results__list
+          each offer, i in searchedOffers
+            li.search-results__item
+              include ./components/ticket-card
+      else
+        .search-results__message
+          p
+            | Не найдено
+            br
+            | ни одной публикации
   section.tickets-list
     h2.visually-hidden Самые новые предложения
     .tickets-list__wrapper
@@ -20,4 +27,4 @@ block content
       ul
         each offer, i in offers
           li.tickets-list__item
-            include ./components/ticket-card.pug
+            include ./components/ticket-card
