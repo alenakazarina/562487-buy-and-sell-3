@@ -1,14 +1,18 @@
 - cardOffer= offer
 div(class=`ticket-card ticket-card--color${cardOffer.id}`)
   .ticket-card__img
-    img(src= offer.picture srcset= cardOffer.pictureSrcset alt='Изображение товара')
+    img(
+      src= offer.picture
+      srcset= cardOffer.pictureSrcset
+      alt='Изображение товара'
+    )
   .ticket-card__info
     span.ticket-card__label= offer.type === `sale` ? `Продам` : `Куплю`
     .ticket-card__categories
-      a(href='#')= cardOffer.category.join(`, `)
+      a(href=`/offers/category/${cardOffer.category.id}`)= cardOffer.category.join(`, `)
     .ticket-card__header
       h3.ticket-card__title
-        a(href='#')= cardOffer.title
+        a(href=`/offers/${cardOffer.id}`)= cardOffer.title
       p.ticket-card__price
         span.js-sum= cardOffer.sum
         |  ₽

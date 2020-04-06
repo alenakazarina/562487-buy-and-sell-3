@@ -1,6 +1,9 @@
 - offerCategory= category
 
-a(href='#' class=`category-tile ${page === `index` ? `category-tile--default` : ``} ${page === `ticket` ? `category-tile--small` : ``} ${activeCategory && activeCategory === category ? `category-tile--active` : ``}`)
+a(href=`/offers/category/${category.id}` class=`category-tile
+  ${page === `index` ? `category-tile--default` : ``}
+  ${page === `ticket` ? `category-tile--small` : ``}
+  ${activeCategory && activeCategory === category ? `category-tile--active` : ``}`)
   span.category-tile__image
     img(src=offerCategory.picture srcset=offerCategory.srcset alt='Иконка категории')
   span.category-tile__label= `${offerCategory.title} `
