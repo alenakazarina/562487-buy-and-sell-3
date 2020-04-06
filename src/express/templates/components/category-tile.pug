@@ -1,0 +1,9 @@
+- offerCategory= category
+
+a.category-tile(href='#')
+  span.category-tile__image
+    img(src=offerCategory.picture srcset=offerCategory.srcset alt='Иконка категории')
+  span.category-tile__label= offerCategory.title
+  if (page === `category`) {
+    span.category-tile__qty.js-qty=  ` ${offerCategory.count}`
+  }

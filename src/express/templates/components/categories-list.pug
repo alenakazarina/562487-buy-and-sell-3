@@ -1,0 +1,7 @@
+section.categories-list
+  h1.visually-hidden Сервис объявлений "Куплю - продам"
+  ul.categories-list__wrapper
+    each category, i in categories
+      li.categories-list__item
+        include category-tile.pug
+

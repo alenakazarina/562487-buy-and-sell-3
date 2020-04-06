@@ -1,0 +1,9 @@
+- userComment= comment
+.comment-card
+  .comment-card__header
+    a.comment-card__avatar.avatar(href='#')
+      img(src= userComment.avatarUrl srcset= userComment.avatarSrcset alt='Аватар пользователя')
+    p.comment-card__author= userComment.user
+  .comment-card__content
+    p= userComment.text
+  button.comment-card__delete.js-delete(type='button') Удалить

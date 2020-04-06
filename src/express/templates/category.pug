@@ -1,0 +1,14 @@
+extends ./components/layout.pug
+
+block content
+  include ./components/categories-list.pug
+  section.tickets-list
+    h2.visually-hidden Предложения из категории электроника
+    .tickets-list__wrapper
+      .tickets-list__header
+        p.tickets-list__title Электроника <b class="js-qty"> 62 </b>
+      ul
+        each offer, i in offers
+          li.tickets-list__item
+            include ./components/ticket-card.pug
+      include components/tickets-list-pagination.pug

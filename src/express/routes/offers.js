@@ -11,7 +11,13 @@ const OffersRoutes = {
 };
 
 offersRouter.get(OffersRoutes.CATEGORY, (req, res) => {
-  res.send(`/offers/category/${req.params.id}`);
+  const pageContent = {
+    page: `category`,
+    title: `Куплю Продам`,
+    description: `Доска объявлений — современный веб-сайт, упрощающий продажу или покупку абсолютно любых вещей.`
+  };
+
+  res.render(`category`, pageContent);
 });
 
 offersRouter.get(OffersRoutes.ADD, (req, res) => {
