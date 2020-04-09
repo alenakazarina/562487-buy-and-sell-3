@@ -1,4 +1,4 @@
-extends ./components/layout
+extends components/layout
 
 block content
   section.comments
@@ -16,7 +16,7 @@ block content
             ul.comments-list
               each comment, i in comments
                 li.js-card
-                  include ./components/comment-card
+                  include components/comment-card
       else
         p.comments__message У ваших публикаций еще нет комментариев.
 

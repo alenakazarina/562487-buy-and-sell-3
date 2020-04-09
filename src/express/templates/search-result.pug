@@ -1,4 +1,4 @@
-extends ./components/layout
+extends components/layout
 
 block content
   section.search-results
@@ -11,7 +11,7 @@ block content
         ul.search-results__list
           each offer, i in searchedOffers
             li.search-results__item
-              include ./components/ticket-card
+              include components/ticket-card
       else
         .search-results__message
           p
@@ -27,4 +27,4 @@ block content
       ul
         each offer, i in offers
           li.tickets-list__item
-            include ./components/ticket-card
+            include components/ticket-card

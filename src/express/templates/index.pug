@@ -1,8 +1,8 @@
-extends ./components/layout
+extends components/layout
 
 block content
   if offers.length
-    include ./components/categories
+    include components/categories
     section.tickets-list
       h2.visually-hidden Самые новые предложения
       .tickets-list__wrapper
@@ -11,7 +11,7 @@ block content
         ul
           each offer, i in offers
             li.tickets-list__item
-              include ./components/ticket-card
+              include components/ticket-card
     section.tickets-list
       h2.visually-hidden Самые обсуждаемые предложения
       .tickets-list__wrapper
@@ -20,7 +20,7 @@ block content
         ul
           each offer, i in offers.slice(0, 4)
             li.tickets-list__item
-              include ./components/ticket-card
+              include components/ticket-card
   else
     .message
       .message__text

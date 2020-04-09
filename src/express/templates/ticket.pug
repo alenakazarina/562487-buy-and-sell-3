@@ -1,12 +1,12 @@
-extends ./components/layout
+extends components/layout
 
 block content
   section.ticket
     .ticket__wrapper
       h1.visually-hidden Карточка объявления
-      include ./components/ticket-content
+      include components/ticket-content
       .ticket__comments
-        include ./components/comment-form
-          include ./components/comments-list
+        include components/comment-form
+          include components/comments-list
 
 
