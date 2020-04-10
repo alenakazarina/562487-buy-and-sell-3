@@ -40,7 +40,8 @@ const DataPath = {
 const DataFiles = {
   CATEGORIES: `categories.txt`,
   SENTENCES: `sentences.txt`,
-  TITLES: `titles.txt`
+  TITLES: `titles.txt`,
+  COMMENTS: `comments.txt`
 };
 
 module.exports = {

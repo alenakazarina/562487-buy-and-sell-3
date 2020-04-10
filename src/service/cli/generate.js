@@ -1,18 +1,29 @@
 'use strict';
 const chalk = require(`chalk`);
+const {nanoid} = require(`nanoid`);
 const {InputData, OffersData, Commands, DataPath, DataFiles} = require(`../const`);
 const {getRandomInteger, getRandomItem, getRandomItems, getPictures, getRandomText} = require(`../utils/generate`);
 const {getPath, readData, writeData} = require(`../utils/common`);
 
-const generateOffers = (categories, sentences, titles, count) => {
+const generateComments = (comments) => {
+  const commentsCount = getRandomInteger(0, 5);
+  return Array.from({length: commentsCount}, () => ({
+    id: nanoid(6),
+    text: getRandomText(comments, getRandomInteger(1, (comments.length - 1) / 2))
+  }));
+};
+
+const generateOffers = (categories, sentences, titles, comments, count) => {
   const pictures = getPictures();
   return Array.from({length: count}, () => ({
+    id: nanoid(6),
     type: getRandomItem(Object.values(OffersData.TYPE)),
     title: getRandomItem(titles),
     description: getRandomText(sentences, OffersData.MAX_TEXT_LENGHT),
     sum: getRandomInteger(OffersData.PRICE_LIMIT.MIN, OffersData.PRICE_LIMIT.MAX),
     picture: getRandomItem(pictures),
-    category: getRandomItems(categories)
+    category: getRandomItems(categories),
+    comments: generateComments(comments)
   }));
 };
 
@@ -29,7 +40,9 @@ module.exports = {
     const categories = await readData(getPath(DataFiles.CATEGORIES));
     const sentences = await readData(getPath(DataFiles.SENTENCES));
     const titles = await readData(getPath(DataFiles.TITLES));
-    const content = JSON.stringify(generateOffers(categories, sentences, titles, offersCount));
+    const comments = await readData(getPath(DataFiles.COMMENTS));
+
+    const content = JSON.stringify(generateOffers(categories, sentences, titles, comments, offersCount));
 
     await writeData(DataPath.OUT, content);
   }
