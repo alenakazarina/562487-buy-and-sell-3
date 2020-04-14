@@ -1,0 +1,24 @@
+### add new offer
+POST http://localhost:3000/api/offers HTTP/1.1
+content-type: application/json
+
+{
+  "ticket-name": "Куплю приставку Sony Playstation 5.",
+  "action": "offer",
+  "comment": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "price": 5151,
+  "avatar": "avatar.jpg",
+  "category": ["Разное", "Игры"]
+}
+
+### check new offer - paste id from previous request
+GET http://localhost:3000/api/offers/ovaByA HTTP/1.1
+
+### delete offer - paste id from previous request
+DELETE http://localhost:3000/api/offers/ovaByA HTTP/1.1
+
+### check offer deleted - paste id from previous request
+GET http://localhost:3000/api/offers/ovaByA HTTP/1.1
+
+### delete offer not found
+DELETE http://localhost:3000/api/offers/ovaByA HTTP/1.1

@@ -1,0 +1,46 @@
+### post offer success
+POST http://localhost:3000/api/offers HTTP/1.1
+content-type: application/json
+
+{
+  "ticket-name": "Куплю приставку Sony Playstation 5.",
+  "action": "offer",
+  "comment": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "price": 5151,
+  "avatar": "avatar.jpg",
+  "category": ["Разное", "Игры"]
+}
+
+### check new offer - paste id from previous request
+GET http://localhost:3000/api/offers/8MvC9_ HTTP/1.1
+
+### delete offer - paste id from previous request
+DELETE http://localhost:3000/api/offers/8MvC9_ HTTP/1.1
+
+### check offer deleted - paste id from previous request
+GET http://localhost:3000/api/offers/8MvC9_ HTTP/1.1
+
+### post offer failed - missed offer ticket-name field
+POST http://localhost:3000/api/offers/ HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Куплю приставку Sony Playstation 5.",
+  "action": "offer",
+  "comment": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "price": 5151,
+  "avatar": "avatar.jpg",
+  "category": ["Разное", "Игры"]
+}
+
+### post offer failed - missed field - action
+POST http://localhost:3000/api/offers/ HTTP/1.1
+content-type: application/json
+
+{
+  "ticket-name": "Куплю приставку Sony Playstation 5.",
+  "comment": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "price": 5151,
+  "avatar": "avatar.jpg",
+  "category": ["Разное", "Игры"]
+}

@@ -1,0 +1,56 @@
+### add new offer
+POST http://localhost:3000/api/offers HTTP/1.1
+content-type: application/json
+
+{
+  "ticket-name": "Куплю розы в колбе.",
+  "action": "offer",
+  "comment": "Розы должны быть белыми 🙏🏽. С доставкой до дома 🚚.",
+  "price": 1000,
+  "avatar": "avatar.jpg",
+  "category": ["Растения"]
+}
+
+### get comments success - paste offer id from previous request
+GET http://localhost:3000/api/offers/z5b4gk/comments HTTP/1.1
+
+### post comment success - paste offer id from previous request
+POST http://localhost:3000/api/offers/z5b4gk/comments/ HTTP/1.1
+content-type: application/json
+
+{
+  "comment": "Почему так дешёво? Оно в ужасном состоянии?"
+}
+
+### check added comment - paste offer id from previous request
+GET http://localhost:3000/api/offers/z5b4gk/comments HTTP/1.1
+
+### delete comment success - paste offer and comment ids from previous requests
+DELETE http://localhost:3000/api/offers/z5b4gk/comments/LU_d-J HTTP/1.1
+
+### check deleted comment - paste offer id from previous request
+GET http://localhost:3000/api/offers/z5b4gk/comments HTTP/1.1
+
+### delete offer - paste id from previous request
+DELETE http://localhost:3000/api/offers/z5b4gk HTTP/1.1
+
+### check offer deleted - paste id from previous request
+GET http://localhost:3000/api/offers/z5b4gk HTTP/1.1
+
+### get comments failed - offer not found
+GET http://localhost:3000/api/offers/uEPRPP/comments HTTP/1.1
+
+### post comment failed - missed comment field
+POST http://localhost:3000/api/offers/o6gLKA/comments/ HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Почему так дешёво?"
+}
+
+### delete comment fail - not found offer
+DELETE http://localhost:3000/api/offers/pi5-AF/comments/nfZe8X HTTP/1.1
+
+### delete comment fail - not found comment
+DELETE http://localhost:3000/api/offers/Ydy6D1/comments/nfZe8Y HTTP/1.1
+
