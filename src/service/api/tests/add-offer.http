@@ -11,14 +11,14 @@ content-type: application/json
   "category": ["Разное", "Игры"]
 }
 
-### check new offer - paste id from previous request
-GET http://localhost:3000/api/offers/8MvC9_ HTTP/1.1
+### check new offer added
+GET http://localhost:3000/api/offers/OksVMO HTTP/1.1
 
-### delete offer - paste id from previous request
-DELETE http://localhost:3000/api/offers/8MvC9_ HTTP/1.1
+### delete added offer
+DELETE http://localhost:3000/api/offers/OksVMO HTTP/1.1
 
-### check offer deleted - paste id from previous request
-GET http://localhost:3000/api/offers/8MvC9_ HTTP/1.1
+### check added offer deleted
+GET http://localhost:3000/api/offers/OksVMO HTTP/1.1
 
 ### post offer failed - missed offer ticket-name field
 POST http://localhost:3000/api/offers/ HTTP/1.1
@@ -33,7 +33,7 @@ content-type: application/json
   "category": ["Разное", "Игры"]
 }
 
-### post offer failed - missed field - action
+### post offer failed - incorrect required fields count
 POST http://localhost:3000/api/offers/ HTTP/1.1
 content-type: application/json
 
@@ -44,3 +44,9 @@ content-type: application/json
   "avatar": "avatar.jpg",
   "category": ["Разное", "Игры"]
 }
+
+### post offer failed - incorrect required fields count
+POST http://localhost:3000/api/offers/ HTTP/1.1
+content-type: application/json
+
+{}

@@ -12,10 +12,10 @@ content-type: application/json
 }
 
 ### check new offer - paste offer id from previuos request
-GET http://localhost:3000/api/offers/2X32OE HTTP/1.1
+GET http://localhost:3000/api/offers/1Glzon HTTP/1.1
 
 ### put offer success - paste offer id from previuos request
-PUT http://localhost:3000/api/offers/2X32OE HTTP/1.1
+PUT http://localhost:3000/api/offers/1Glzon HTTP/1.1
 content-type: application/json
 
 {
@@ -24,19 +24,25 @@ content-type: application/json
 }
 
 ### check put success - paste offer id from previuos request
-GET http://localhost:3000/api/offers/2X32OE HTTP/1.1
+GET http://localhost:3000/api/offers/1Glzon HTTP/1.1
 
 ### delete offer - paste id from previous request
-DELETE http://localhost:3000/api/offers/2X32OE HTTP/1.1
+DELETE http://localhost:3000/api/offers/1Glzon HTTP/1.1
 
 ### check deleted offer - paste offer id from previuos request
-GET http://localhost:3000/api/offers/2X32OE HTTP/1.1
+GET http://localhost:3000/api/offers/1Glzon HTTP/1.1
 
-### put offer failed - wrong field - name
-PUT http://localhost:3000/api/offers/Ydy6D1 HTTP/1.1
+### put offer failed
+PUT http://localhost:3000/api/offers/OGPGDP HTTP/1.1
 content-type: application/json
 
 {
   "name": "Куплю любимые книги Харуки Мураками.",
   "price": 3000
 }
+
+### put offer failed - wrong field - name
+PUT http://localhost:3000/api/offers/OGPGDP HTTP/1.1
+content-type: application/json
+
+{}

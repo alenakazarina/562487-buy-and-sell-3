@@ -2,7 +2,7 @@
 GET http://localhost:3000/api/offers HTTP/1.1
 
 ### get offer success
-GET http://localhost:3000/api/offers/Ydy6D1 HTTP/1.1
+GET http://localhost:3000/api/offers/b7wD_i HTTP/1.1
 
 ### get offer failed - not found
 GET http://localhost:3000/api/offers/uEPRPP HTTP/1.1
