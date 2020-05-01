@@ -12,10 +12,10 @@ content-type: application/json
 }
 
 ### check new offer added
-GET http://localhost:3000/api/offers/OksVMO HTTP/1.1
+GET http://localhost:3000/api/offers/sYhq1b HTTP/1.1
 
 ### delete added offer
-DELETE http://localhost:3000/api/offers/OksVMO HTTP/1.1
+DELETE http://localhost:3000/api/offers/U07qqK HTTP/1.1
 
 ### check added offer deleted
 GET http://localhost:3000/api/offers/OksVMO HTTP/1.1

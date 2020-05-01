@@ -12,10 +12,10 @@ content-type: application/json
 }
 
 ### check added offer
-GET http://localhost:3000/api/offers/WGVfLm HTTP/1.1
+GET http://localhost:3000/api/offers/9NS9cm HTTP/1.1
 
 ### delete added offer
-DELETE http://localhost:3000/api/offers/Y1R6W2 HTTP/1.1
+DELETE http://localhost:3000/api/offers/9NS9cm HTTP/1.1
 
 ### check added offer deleted
 GET http://localhost:3000/api/offers/Y1R6W2 HTTP/1.1

@@ -12,10 +12,10 @@ content-type: application/json
 }
 
 ### get comments success - paste offer id from previous request
-GET http://localhost:3000/api/offers/PPXHG6/comments HTTP/1.1
+GET http://localhost:3000/api/offers/SdmZnv/comments HTTP/1.1
 
 ### post comment success - paste offer id from previous request
-POST http://localhost:3000/api/offers/PPXHG6/comments/ HTTP/1.1
+POST http://localhost:3000/api/offers/SdmZnv/comments/ HTTP/1.1
 content-type: application/json
 
 {
@@ -23,7 +23,7 @@ content-type: application/json
 }
 
 ### check added comment - paste offer id from previous request
-GET http://localhost:3000/api/offers/PPXHG6/comments HTTP/1.1
+GET http://localhost:3000/api/offers/SdmZnv/comments HTTP/1.1
 
 ### delete comment success - paste offer and comment ids from previous requests
 DELETE http://localhost:3000/api/offers/PPXHG6/comments/Sc9hQi HTTP/1.1
