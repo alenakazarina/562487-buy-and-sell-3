@@ -1,7 +1,8 @@
 'use strict';
 const {readOffers, readCategories} = require(`./helpers`);
 const {Offer, Comment} = require(`./models`);
-const {logger} = require(`../logger/logger`);
+const {getLogger} = require(`../logger`);
+const logger = getLogger({name: `store`});
 
 class Store {
   constructor() {
@@ -46,6 +47,9 @@ class Store {
 
   async updateOffer(offerId, updatedFields) {
     const offer = this.offers.find((storeOffer) => storeOffer.id === offerId);
+    if (!offer) {
+      return null;
+    }
     if (updatedFields[`ticket-name`]) {
       offer[`title`] = updatedFields[`ticket-name`];
     }
@@ -101,7 +105,7 @@ class Store {
       return null;
     }
 
-    const comment = offer.comments.splice(index, 1);
+    const comment = offer.comments.splice(index, 1)[0];
     return comment;
   }
 

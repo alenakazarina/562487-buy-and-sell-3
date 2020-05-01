@@ -2,7 +2,7 @@
 const {Router} = require(`express`);
 const {Store} = require(`../db/store`);
 const {HttpCode} = require(`../const`);
-const {getLogger} = require(`../logger/logger`);
+const {getLogger} = require(`../logger`);
 const logger = getLogger({name: `rest-api`});
 
 const REQUIRED_OFFER_FIELDS = [
@@ -76,7 +76,7 @@ api.post(Paths.OFFERS, async (req, res) => {
       res
         .status(HttpCode.BAD_REQUEST)
         .send({message: `Incorrect required fields count`});
-      logger.error(`Post offer error: ${res.statusCode}`);
+      logger.error(`Create offer error: ${res.statusCode}`);
       return;
     }
 
@@ -85,14 +85,14 @@ api.post(Paths.OFFERS, async (req, res) => {
         res
           .status(HttpCode.BAD_REQUEST)
           .send({message: `Missed offer field: ${offerField}`});
-        logger.error(`Post offer error: ${res.statusCode}`);
+        logger.error(`Create offer error: ${res.statusCode}`);
         return;
       }
     }
 
     const offer = await store.createOffer(newOffer);
     res.status(HttpCode.CREATED).json(offer);
-    logger.info(`Offer ${offer.id} was created successfully: ${res.statusCode}`);
+    logger.info(`Create offer ${offer.id} success: ${res.statusCode}`);
   } catch (err) {
     onError(err, res);
   }
@@ -102,18 +102,9 @@ api.put(Paths.OFFER, async (req, res) => {
   try {
     const updatedFields = req.body;
     const {offerId} = req.params;
-    const offer = await store.getOfferById(offerId);
 
     const isNoUpdates = Object.keys(updatedFields).length === 0;
     const hasWrongFields = Object.keys(updatedFields).filter((field) => REQUIRED_OFFER_FIELDS.includes(field) === false).length;
-
-    if (!offer) {
-      res
-        .status(HttpCode.NOT_FOUND)
-        .send({message: `Update offer ${offerId} error`});
-      logger.error(`Update offer ${offerId} error: ${res.statusCode}`);
-      return;
-    }
 
     if (isNoUpdates || hasWrongFields) {
       res
@@ -123,9 +114,18 @@ api.put(Paths.OFFER, async (req, res) => {
       return;
     }
 
-    const updatedOffer = await store.updateOffer(offerId, updatedFields);
-    res.status(HttpCode.OK).json(updatedOffer);
-    logger.info(`Offer ${offerId} was updated successfully: ${res.statusCode}`);
+    const offer = await store.updateOffer(offerId, updatedFields);
+
+    if (!offer) {
+      res
+        .status(HttpCode.NOT_FOUND)
+        .send({message: `Offer with id: ${offerId} was not found`});
+      logger.error(`Update offer ${offerId} error: ${res.statusCode}`);
+      return;
+    }
+
+    res.status(HttpCode.OK).json(offer);
+    logger.info(`Update offer ${offerId} success: ${res.statusCode}`);
   } catch (err) {
     onError(err, res);
   }
@@ -145,7 +145,7 @@ api.delete(Paths.OFFER, async (req, res) => {
     }
 
     res.status(HttpCode.OK).json(offer);
-    logger.info(`Offer ${offerId} was deleted successfully: ${res.statusCode}`);
+    logger.info(`Delete offer ${offerId} success: ${res.statusCode}`);
   } catch (err) {
     onError(err, res);
   }
@@ -179,7 +179,7 @@ api.delete(Paths.COMMENT, async (req, res) => {
     if (!comment) {
       res
         .status(HttpCode.NOT_FOUND)
-        .send({message: `Delete offer ${offerId} comment ${commentId} error: ${res.statusCode}`});
+        .send({message: `Delete offer ${offerId} comment ${commentId} 404`});
       logger.error(`Delete offer ${offerId} comment ${commentId} error: ${res.statusCode}`);
       return;
     }
@@ -202,8 +202,8 @@ api.post(Paths.COMMENTS, async (req, res) => {
     if (!comment || hasNoRequiredField) {
       res
         .status(HttpCode.BAD_REQUEST)
-        .send({message: `POST offer ${offerId} comment error`});
-      logger.error(`POST offer ${offerId} comment error: ${res.statusCode}`);
+        .send({message: `Create offer ${offerId} comment error`});
+      logger.error(`Create offer ${offerId} comment error: ${res.statusCode}`);
       return;
     }
 
@@ -222,13 +222,13 @@ api.get(Paths.SEARCH, async (req, res) => {
       res
         .status(HttpCode.BAD_REQUEST)
         .send({message: `Missed search query`});
-      logger.error(`Search error: ${res.statusCode}`);
+      logger.error(`Get search error: ${res.statusCode}`);
       return;
     }
 
     const searchResults = await store.search(query);
     res.status(HttpCode.OK).json(searchResults);
-    logger.info(`Search ${query} success: ${res.statusCode}`);
+    logger.info(`Get search success: ${res.statusCode}`);
   } catch (err) {
     onError(err, res);
   }

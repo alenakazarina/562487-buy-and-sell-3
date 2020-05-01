@@ -2,7 +2,7 @@
 const fs = require(`fs`).promises;
 const {getPath} = require(`../utils/common`);
 const {DataPath, DataFiles} = require(`../const`);
-const {getLogger} = require(`../logger/logger`);
+const {getLogger} = require(`../logger`);
 const logger = getLogger({name: `pino-helpers`});
 
 const readOffers = async () => {
