@@ -2,40 +2,47 @@
 
 const request = require(`supertest`);
 const express = require(`express`);
-const {api} = require(`./api`);
+const {API} = require(`./api`);
+const {Store} = require(`../db/store`);
 const mocks = require(`./api-mocks`);
 
-const DEL_OFFER_ID = `WpQXW_`;
-const DEL_COMMENT_ID = `6SJQjR`;
+const Ids = {
+  OFFER: `1`,
+  COMMENT: `1`,
+  OFFER_DEL: `2`,
+  COMMENT_DEL: `2`,
+  OFFER_NOT_FOUND: `3`,
+  COMMENT_NOT_FOUND: `3`
+};
 
 const Paths = {
   OFFERS: `/api/offers`,
-  OFFER: `/api/offers/Y1R6W2`,
+  OFFER: `/api/offers/${Ids.OFFER}`,
   CATEGORIES: `/api/categories`,
-  COMMENTS: `/api/offers/Y1R6W2/comments`,
-  COMMENT: `/api/offers/Y1R6W2/comments/virgVq`,
+  COMMENTS: `/api/offers/${Ids.OFFER}/comments`,
+  COMMENT: `/api/offers/${Ids.OFFER}/comments/${Ids.COMMENT}`,
   SEARCH: `/api/search?query=куплю`,
-  OFFER_DEL: `/api/offers/WpQXW_`,
-  COMMENT_DEL: `/api/offers/wtLQZQ/comments/${DEL_COMMENT_ID}`,
-  OFFER_NOT_FOUND: `/api/offers/Y1R6W3`,
-  COMMENTS_NOT_FOUND: `/api/offers/Y1R6W3/comments`,
-  COMMENT_NOT_FOUND: `/api/offers/wtLQZQ/comments/6SJQjG`,
+  OFFER_DEL: `/api/offers/${Ids.OFFER_DEL}`,
+  COMMENT_DEL: `/api/offers/${Ids.OFFER}/comments/${Ids.COMMENT_DEL}`,
+  OFFER_NOT_FOUND: `/api/offers/${Ids.OFFER_NOT_FOUND}`,
+  COMMENTS_NOT_FOUND: `/api/offers/${Ids.OFFER_NOT_FOUND}/comments`,
+  COMMENT_NOT_FOUND: `/api/offers/${Ids.OFFER}/comments/${Ids.COMMENT_NOT_FOUND}`,
   SEARCH_EMPTY: `/api/search?query=`
 };
 
 let server = null;
+const store = new Store(mocks.offers, mocks.categories);
+const api = new API(store);
 const app = express();
 
-beforeAll(() => {
-  app.use(express.json());
-  app.use(`/api`, api);
-  app.use((req, res) => {
-    res
-      .status(404)
-      .send({message: `not found`});
-  });
-  server = app.listen(3000);
+app.use(express.json());
+app.use(`/api`, api.start());
+app.use((req, res) => {
+  res
+    .status(404)
+    .send({message: `not found`});
 });
+server = app.listen(3000);
 
 afterAll(() => {
   server.close();
@@ -155,7 +162,7 @@ describe(`api`, () => {
     test(`When delete offer status code should be 200`, async () => {
       const res = await request(app).delete(Paths.OFFER_DEL);
       expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty(`id`, DEL_OFFER_ID);
+      expect(res.body).toHaveProperty(`id`, Ids.OFFER_DEL);
     });
 
     test(`When delete offer error 404`, async () => {
@@ -168,7 +175,7 @@ describe(`api`, () => {
     test(`When delete offer comment status code should be 200`, async () => {
       const res = await request(app).delete(Paths.COMMENT_DEL);
       expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty(`id`, DEL_COMMENT_ID);
+      expect(res.body).toHaveProperty(`id`, Ids.COMMENT_DEL);
     });
 
     test(`When delete offer comment error 404`, async () => {

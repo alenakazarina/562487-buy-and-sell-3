@@ -1,13 +1,10 @@
 'use strict';
-const {readOffers, readCategories} = require(`./helpers`);
 const {Offer, Comment} = require(`./models`);
-const {getLogger} = require(`../logger`);
-const logger = getLogger({name: `store`});
 
 class Store {
-  constructor() {
-    this._offers = [];
-    this._categories = [];
+  constructor(offers, categories) {
+    this._offers = offers;
+    this._categories = categories;
   }
 
   get offers() {
@@ -16,15 +13,6 @@ class Store {
 
   get categories() {
     return this._categories;
-  }
-
-  async init() {
-    try {
-      this._offers = await readOffers();
-      this._categories = await readCategories();
-    } catch (err) {
-      logger.error(err);
-    }
   }
 
   async getOffers() {

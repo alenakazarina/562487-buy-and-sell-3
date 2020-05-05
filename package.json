@@ -12,7 +12,7 @@
     "start.version": "node ./src/service/service.js --version",
     "start.generate": "node ./src/service/service.js --generate 20",
     "start-front-server": "nodemon ./src/express/index.js",
-    "start.server": "nodemon ./src/service/service.js --server 3000",
+    "start.server": "nodemon ./src/service/service.js --server 3000 | pino-pretty",
     "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 | pino-pretty",
     "start::debug": "cross-env LOG_LEVEL=debug nodemon ./src/service/service.js --server 3000 | pino-pretty"
   },

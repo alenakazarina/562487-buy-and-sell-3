@@ -1,6 +1,8 @@
 'use strict';
 const express = require(`express`);
-const {api} = require(`../api/api`);
+const {readOffers, readCategories} = require(`../utils/helpers`);
+const {Store} = require(`../db/store`);
+const {API} = require(`../api/api`);
 const {Commands, HttpCode} = require(`../const`);
 const {PORT} = require(`../config`);
 const {getLogger} = require(`../logger`);
@@ -13,12 +15,17 @@ const startRequest = (req, res, next) => {
 
 module.exports = {
   name: Commands.SERVER,
-  run: (userPort) => {
+  run: async (userPort) => {
+    const offers = await readOffers();
+    const categories = await readCategories();
+    const store = new Store(offers, categories);
+    const api = new API(store);
+
     const port = userPort || PORT;
     const server = express();
     server.use(startRequest);
     server.use(express.json());
-    server.use(`/api`, api);
+    server.use(`/api`, api.start());
     server.use((req, res) => {
       res
         .status(HttpCode.NOT_FOUND)
