@@ -1,26 +1,11 @@
 'use strict';
+
 const {Router} = require(`express`);
-const {cardsOffers, offerComments, PageContent} = require(`./data`);
+const myController = require(`../controller/my`);
 
-const myRouter = new Router();
+const route = new Router();
 
-myRouter.get(`/`, (req, res) => {
-  const myPageContent = Object.assign({}, PageContent, {
-    page: `my`,
-    offers: cardsOffers
-  });
-  res.render(`my-tickets`, myPageContent);
-});
+route.get(`/`, myController.renderMyOffers);
+route.get(`/comments`, myController.renderMyComments);
 
-myRouter.get(`/comments`, (req, res) => {
-  const commentsPagecontent = Object.assign({}, PageContent, {
-    page: `comments`,
-    offers: cardsOffers.slice(0, 2),
-    comments: offerComments
-  });
-  res.render(`comments`, commentsPagecontent);
-});
-
-module.exports = {
-  myRouter
-};
+module.exports = route;
