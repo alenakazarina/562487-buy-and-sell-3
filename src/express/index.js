@@ -1,44 +1,30 @@
 'use strict';
+
 const express = require(`express`);
 const path = require(`path`);
-const {commonRouter} = require(`./routes/common`);
-const {offersRouter} = require(`./routes/offers`);
-const {myRouter} = require(`./routes/my`);
+const commonRouter = require(`./routes/common`);
+const myRouter = require(`./routes/my`);
+const offersRouter = require(`./routes/offers`);
+const setAppUser = require(`./middlewares/set-app-user`);
+const handleNotFound = require(`./middlewares/handle-not-found`);
+const handleError = require(`./middlewares/handle-error`);
 
-const PORT = 8080;
 const PUBLIC_DIR = `public`;
-const server = express();
+const app = express();
 
-server.set(`views`, path.resolve(__dirname, `templates`));
-server.set(`view engine`, `pug`);
-server.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.locals.title = `Куплю Продам`;
+app.locals.description = `Доска объявлений — современный веб-сайт, упрощающий продажу или покупку абсолютно любых вещей.`;
 
-server.use(`/`, commonRouter);
-server.use(`/offers`, offersRouter);
-server.use(`/my`, myRouter);
+app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.use(express.json());
+app.set(`views`, path.resolve(__dirname, `templates`));
+app.set(`view engine`, `pug`);
+app.use(setAppUser);
+app.use(`/`, commonRouter);
+app.use(`/offers`, offersRouter);
+app.use(`/my`, myRouter);
+app.use(handleNotFound);
+app.use(handleError);
 
-server.use((req, res) => {
-  const notFoundPageContent = {
-    page: `404`,
-    statusCode: 404,
-    statusText: `Страница не найдена`
-  };
-  res
-    .status(`404`)
-    .render(`404`, notFoundPageContent);
-});
+module.exports = app;
 
-server.use((err, req, res) => {
-  const errorPageContent = {
-    page: `500`,
-    statusCode: 500,
-    statusText: `Ошибка cервера`
-  };
-  res
-    .status(`500`)
-    .render(`500`, errorPageContent);
-});
-
-server.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT}`);
-});
