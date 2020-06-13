@@ -14,5 +14,8 @@ node_modules/
 # Папка с собранными файлами проекта
 build/
 
+# Папка с загрузками
+src/express/public/upload
+
 # Моки
 mocks.json
