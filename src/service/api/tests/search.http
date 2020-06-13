@@ -1,8 +1,0 @@
-### get search success
-GET http://localhost:3000/api/search?query=куплю HTTP/1.1
-
-### get search empty
-GET http://localhost:3000/api/search?query=долго HTTP/1.1
-
-### get search failed - empty query
-GET http://localhost:3000/api/search?query= HTTP/1.1

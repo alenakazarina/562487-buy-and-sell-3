@@ -1,0 +1,53 @@
+### get current user
+GET http://localhost:3000/api/user HTTP/1.1
+
+### login fake user
+POST http://localhost:3000/api/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "alena@gmail.com",
+  "password": "123"
+}
+
+### login user wrong password - bad request
+POST http://localhost:3000/api/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "shkatulkin@ya.ru",
+  "password": "321"
+}
+
+### login user success
+POST http://localhost:3000/api/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "shkatulkin@ya.ru",
+  "password": "123"
+}
+
+### get current user
+GET http://localhost:3000/api/user HTTP/1.1
+
+### register user success
+POST http://localhost:3000/api/register HTTP/1.1
+content-type: application/json
+
+{
+  "user-name": "Alena",
+  "user-email": "alena1@gmail.com",
+  "user-password": "123",
+  "user-password-again": "123"
+}
+
+### register user bad request
+POST http://localhost:3000/api/register HTTP/1.1
+content-type: application/json
+
+{
+  "user-email": "alena1@gmail.com",
+  "user-password": "123",
+  "user-password-again": "123"
+}

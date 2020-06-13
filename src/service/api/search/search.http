@@ -1,0 +1,6 @@
+### get search success
+GET http://localhost:3000/api/search?query=часы HTTP/1.1
+
+### get search empty
+GET http://localhost:3000/api/search?query=штучка HTTP/1.1
+

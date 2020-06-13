@@ -1,0 +1,75 @@
+### get offers
+GET http://localhost:3000/api/offers HTTP/1.1
+
+### get offer success
+GET http://localhost:3000/api/offers/wPtk16 HTTP/1.1
+
+### get offer not found
+GET http://localhost:3000/api/offers/uEPRPP HTTP/1.1
+
+### put offer success
+PUT http://localhost:3000/api/offers/wPtk16 HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Куплю приставку Sony Playstation 5.",
+  "type": "offer",
+  "description": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "sum": 5151,
+  "category": ["1", "2"]
+}
+
+### put offer bad request
+PUT http://localhost:3000/api/offers/NuZLYD HTTP/1.1
+content-type: application/json
+
+{
+  "type": "offer",
+  "description": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "sum": 5151,
+  "category": ["1", "2"]
+}
+
+### put offer bad request
+PUT http://localhost:3000/api/offers/NuZLYD HTTP/1.1
+content-type: application/json
+
+{}
+
+### post offer success
+POST http://localhost:3000/api/offers HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Куплю приставку Sony Playstation 5.",
+  "type": "offer",
+  "description": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "sum": 5151,
+  "category": ["1", "2"]
+}
+
+### check new offer added
+GET http://localhost:3000/api/offers/dm80oe HTTP/1.1
+
+### delete offer success
+DELETE http://localhost:3000/api/offers/dm80oe HTTP/1.1
+
+### delete offer not found
+DELETE http://localhost:3000/api/offers/dm80oe HTTP/1.1
+
+### post offer bad request
+POST http://localhost:3000/api/offers/ HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Куплю приставку Sony Playstation 5.",
+  "type": "offer",
+  "description": "Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.",
+  "category": ["1", "2"]
+}
+
+### post offer bad request
+POST http://localhost:3000/api/offers/ HTTP/1.1
+content-type: application/json
+
+{}

@@ -1,0 +1,27 @@
+### get offers
+GET http://localhost:3000/api/offers/ HTTP/1.1
+
+### post comment success
+POST http://localhost:3000/api/offers/wPtk16/comments/ HTTP/1.1
+content-type: application/json
+
+{
+  "text": "Почему так дешёво? Оно в ужасном состоянии?"
+}
+
+### get comments success
+GET http://localhost:3000/api/offers/wPtk16/comments HTTP/1.1
+
+### delete comment success
+DELETE http://localhost:3000/api/offers/wPtk16/comments/yR7mmE HTTP/1.1
+
+### delete comment not found
+DELETE http://localhost:3000/api/offers/wPtk16/comments/yR7mmE HTTP/1.1
+
+### post comment bad request
+POST http://localhost:3000/api/offers/Rpp_4s/comments/ HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Почему так дешёво?"
+}
