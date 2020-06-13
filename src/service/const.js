@@ -1,4 +1,7 @@
 'use strict';
+
+const MAX_ID_LENGTH = 6;
+
 const InputData = {
   DEFAULT_COUNT: 1,
   MAX_COUNT: 1000,
@@ -48,6 +51,7 @@ const DataFiles = {
 };
 
 module.exports = {
+  MAX_ID_LENGTH,
   InputData,
   OffersData,
   Commands,
