@@ -1,22 +1,38 @@
-- cardOffer= offer
-div(class=`ticket-card ticket-card--color${cardOffer.id}`)
+-
+  const price= offer.sum.toLocaleString().split(`,`).join(` `);
+  const colorId= index > 9 ? index + 1 : `${index + 1}`.padStart(2, `0`);
+  const anounce= offer.description.split(` `)
+    .reduce((text, word) =>
+      (text.length <= 55) ? text.concat(` `, word) : text, ``)
+    .split(` `)
+    .filter((it, i, arr) => i !== arr.length - 1)
+    .join(` `);
+
+div(class=`ticket-card ticket-card--color${colorId}`)
   .ticket-card__img
     img(
       src= offer.picture
-      srcset= cardOffer.pictureSrcset
+      srcset= offer.pictureSrcset
       alt='Изображение товара'
     )
   .ticket-card__info
     span.ticket-card__label= offer.type === `sale` ? `Продам` : `Куплю`
     .ticket-card__categories
-      a(href=`/offers/category/${cardOffer.category.id}`)= cardOffer.category.join(`, `)
+      each category in offer.category
+        a(href=`/offers/category/${category.id}`)= category.title
     .ticket-card__header
       h3.ticket-card__title
-        a(href=`/offers/${cardOffer.id}`)= cardOffer.title
+        if page === `my-tickets`
+          a(href=`/offers/edit/${offer.id}`)= offer.title
+        else
+          a(href=`/offers/${offer.id}`)= offer.title
       p.ticket-card__price
-        span.js-sum= cardOffer.sum
+        span.js-sum= price
         |  ₽
     .ticket-card__desc
-      p= cardOffer.description
-  if page === `my`
-    button.ticket-card__del.js-delete(type='button') Удалить
+      p= anounce
+  if page === `my-tickets`
+    button#ticket-delete.ticket-card__del.js-delete(
+      type='button'
+      data-offer= offer.id
+    ) Удалить

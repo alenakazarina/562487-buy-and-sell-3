@@ -1,7 +1,7 @@
 doctype html
-html(lang='ru' class=`${page === `404` ? `html-not-found`: ``}`)
+html(lang='ru' class=`${page === `404` ? `html-not-found`: `html-server`}`)
   include head
-  body(class=`${page === `404` ? `body-not-found`: ``}`)
+  body(class=`${page === `404` ? `body-not-found`: `body-server`}`)
     main
       section.error
         h1.error__title= statusCode

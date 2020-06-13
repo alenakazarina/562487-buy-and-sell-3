@@ -5,9 +5,9 @@ block content
     h2.visually-hidden Самые новые предложения
     .tickets-list__wrapper
       .tickets-list__header
-        a.tickets-list__btn.btn.btn--big(href='#')
+        a.tickets-list__btn.btn.btn--big(href='/offers/add')
           span Новая публикация
       ul
-        each offer, i in offers
-          li.tickets-list__item
+        each offer, index in offers
+          li.tickets-list__item.js-card
             include components/ticket-card

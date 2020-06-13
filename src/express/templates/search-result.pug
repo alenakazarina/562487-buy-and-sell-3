@@ -23,8 +23,8 @@ block content
     .tickets-list__wrapper
       .tickets-list__header
         p.tickets-list__title Самое свежее
-        a.tickets-list__link(href='#') Еще 25
+        a.tickets-list__link(href='/  ')= `Еще ${offers.length - newOffers.length}`
       ul
-        each offer, i in offers
+        each offer, i in newOffers
           li.tickets-list__item
             include components/ticket-card

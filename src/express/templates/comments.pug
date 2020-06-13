@@ -4,7 +4,7 @@ block content
   section.comments
     .comments__wrapper
       h1.visually-hidden Страница комментариев
-      if comments.length
+      if offers.length
         each offer, i in offers
           .comments__block
             .comments__header
@@ -14,9 +14,25 @@ block content
                   span.announce-card__price= `₽ ${offer.sum}`
                   span.announce-card__type= offer.type === `sale` ? `Продам` : `Куплю`
             ul.comments-list
-              each comment, i in comments
+              each comment, i in offer.comments
                 li.js-card
-                  include components/comment-card
+                  .comment-card
+                    .comment-card__header
+                      a.comment-card__avatar.avatar(href='#')
+                        img(
+                          src= comment.user.avatar
+                          srcset= comment.user.avatarSrcset
+                          alt=`Аватар ${comment.user.name}`
+                        )
+                      p.comment-card__author= comment.user.name
+                    .comment-card__content
+                      p= comment.text
+                      button#comment-delete.comment-card__delete.js-delete(
+                        type='button'
+                        data-offer= offer.id
+                        data-comment= comment.id
+                      ) Удалить
       else
         p.comments__message У ваших публикаций еще нет комментариев.
+
 

@@ -1,7 +1,7 @@
 extends components/layout
 
 block content
-  if offers.length
+  if newOffers.length
     include components/categories
     section.tickets-list
       h2.visually-hidden Самые новые предложения
@@ -9,7 +9,7 @@ block content
         .tickets-list__header
           p.tickets-list__title Самое свежее
         ul
-          each offer, i in offers
+          each offer, index in newOffers
             li.tickets-list__item
               include components/ticket-card
     section.tickets-list
@@ -18,11 +18,11 @@ block content
         .tickets-list__header
           p.tickets-list__title Самые обсуждаемые
         ul
-          each offer, i in offers.slice(0, 4)
+          each offer, index in popularOffers
             li.tickets-list__item
               include components/ticket-card
   else
     .message
       .message__text
         p На сайте еще не опубликовано ни одного объявления.
-      a.message__link.btn.btn--big(href='#') Вход и регистрация
+      a.message__link.btn.btn--big(href='/login') Вход и регистрация

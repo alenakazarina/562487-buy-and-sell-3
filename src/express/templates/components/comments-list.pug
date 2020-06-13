@@ -3,7 +3,17 @@ if comments.length
     ul.comments-list
       each comment in comments
         li
-          include comment-card
+          .comment-card
+            .comment-card__header
+              a.comment-card__avatar.avatar
+                img(
+                  src= comment.user.avatar
+                  srcset= comment.user.avatarSrcset
+                  alt=`Аватар ${comment.user.name}`
+                )
+              p.comment-card__author= comment.user.name
+            .comment-card__content
+              p= comment.text
 else
   .ticket__message
     p У этой публикации еще нет ни одного комментария.

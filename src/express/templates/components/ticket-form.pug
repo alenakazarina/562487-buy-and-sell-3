@@ -1,4 +1,92 @@
-form.ticket-form__form.form(action='#' method='post' enctype='multipart/form-data' autocomplete='off')
-  include ticket-form-avatar
-  include ticket-form-content
-  button.form__button.btn.btn--medium.js-button(type='submit') Сохранить
+form.ticket-form__form.form(
+  name= page === 'new-ticket' ? 'add' : 'edit'
+  method='post'
+  enctype='multipart/form-data'
+  autocomplete='off'
+  data-offer= offer.id
+)
+  .ticket-form__avatar-container.js-preview-container(
+    class= page === 'ticket-edit' ? `uploaded` : ``
+  )
+    .ticket-form__avatar.js-preview
+      if page === 'ticket-edit'
+        img(
+          src= offer.picture
+          srcset= offer.pictureSrcset
+          alt= 'Preview'
+        )
+    .ticket-form__field-avatar
+      input#avatar.visually-hidden.js-file-field(
+        type='file'
+        name='avatar'
+        accept='.jpg, .jpeg, .png'
+        required= page === `new-ticket`
+      )
+      label(for='avatar')
+        span.ticket-form__text-upload Загрузить фото…
+        span.ticket-form__text-another Загрузить другое фото…
+  .ticket-form__content
+    .ticket-form__row
+      .form__field
+        input#ticket-name.js-field(
+          type='text'
+          name='ticket-name'
+          minLength='10'
+          maxLength='100'
+          required
+          value= offer.title
+        )
+        label(for='ticket-name') Название
+        span Обязательное поле
+    .ticket-form__row
+      .form__field
+        textarea#comment-field.js-field(
+          name='comment'
+          cols='30'
+          rows='10'
+          minlength='50'
+          maxlength='1000'
+          required
+        )= offer.description
+        label(for='comment-field') Описание
+        span Обязательное поле
+    .ticket-form__row
+      select#category-field.form__select.js-multiple-select(
+        name='category'
+        data-label='Выбрать категорию публикации'
+        required
+        data-categories= categories.map((it) => it.id).join(`,`)
+        data-titles= categories.map((it) => it.title).join(`,`)
+        data-active= offer.category.map((it) => it.id).join(`,`)
+      )
+    .ticket-form__row
+      .form__field.form__field--price
+        input#price-field.js-field.js-price(
+          type='number'
+          name='price'
+          min='100'
+          required
+          value= offer.sum
+        )
+        label(for='price-field') Цена
+        span Обязательное поле
+      .form__switch.switch
+        .switch__item
+          input#buy-field.visually-hidden(
+            type='radio'
+            name='action'
+            value='offer'
+            required
+            checked= offer.type === `offer`
+          )
+          label.switch__button(for='buy-field') Куплю
+        .switch__item
+          input#sell-field.visually-hidden(
+            type='radio'
+            name='action'
+            value='sale'
+            required
+            checked= offer.type === `sale`
+          )
+          label.switch__button(for='sell-field') Продам
+  button.form__button.btn.btn--medium.js-button(type='submit' disabled) Опубликовать

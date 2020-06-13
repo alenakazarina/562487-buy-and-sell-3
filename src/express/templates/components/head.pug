@@ -1,8 +1,36 @@
 head
   meta(charset='UTF-8')
-  meta(name='description' content= description)
+  meta(name='description' content= locals.description)
   meta(name='viewport' content='width=device-width,initial-scale=1')
   meta(http-equiv='X-UA-Compatible' content='ie=edge')
-  title= title
+  link(rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png")
+  link(rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png")
+  title= locals.title
   link(rel='stylesheet' href='/css/style.min.css')
   base(href='/')
+  if (page !== `index` || page !== 'category' || page !== `search-result`|| page !== '404' || page === '500')
+    style(type="text/css").
+      .field--error {
+        outline: 1px solid red;
+      }
+      .text--error {
+        color: red;
+        min-height: 35px;
+      }
+      @keyframes shake {
+        0%, 100% {
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+
+        10%, 30%, 50%, 70%, 90% {
+          -webkit-transform: translateX(-5px);
+          transform: translateX(-5px);
+        }
+
+        20%, 40%, 60%, 80% {
+          -webkit-transform: translateX(5px);
+          transform: translateX(5px);
+        }
+      }
+
