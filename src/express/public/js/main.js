@@ -1,12 +1,43 @@
 /* eslint-disable */
 'use strict';
+
 (function() {
   var deletEls = document.querySelectorAll('.js-delete');
-  for (var i = 0; i < deletEls.length; i++) {
-    deletEls[i].addEventListener('click', function() {
-      var card = this.closest('.js-card');
-      card.parentNode.removeChild(card);
+  if (deletEls.length === 0) {
+    return;
+  }
 
+  for (var i = 0; i < deletEls.length; i++) {
+    deletEls[i].addEventListener('click', function(evt) {
+      evt.target.setAttribute(`disabled`, `disabled`);
+      const card = this.closest('.js-card');
+      card.style.animation = ``;
+
+      if (evt.target.id === `ticket-delete`) {
+        const offerId = evt.target.dataset.offer;
+        fetch(`http://localhost:3000/api/offers/${offerId}`, {
+          method: `DELETE`
+        })
+          .then(() => {
+            card.parentElement.removeChild(card);
+          })
+          .catch(() => {
+            card.style.animation = `shake 0.6s`;
+            evt.target.removeAttribute(`disabled`);
+          })
+      }
+      if (evt.target.id === `comment-delete`) {
+        const offerId = evt.target.dataset.offer;
+        const commentId = evt.target.dataset.comment;
+        fetch(`http://localhost:3000/api/offers/${offerId}/comments/${commentId}`, {
+          method: `DELETE`,
+        })
+          .then(() => location.reload(true))
+          .catch(() => {
+            card.style.animation = `shake 0.6s`;
+            evt.target.removeAttribute(`disabled`);
+          })
+      }
     })
   }
 })();
@@ -64,32 +95,22 @@
 
     var selects = document.querySelectorAll('.js-multiple-select');
     for (var i = 0; i < selects.length; i++) {
-      var placeholder = selects[i].getAttribute('data-label');
-      var SS = new Selectr(selects[i], {
+      var placeholder = selects[i].dataset['label'];
+      const selectrConfig = {
+        defaultSelected: false,
         searchable: false,
         multiple: true,
         width: 222,
-        placeholder: placeholder
-      });
-      var selection = Selectr.prototype.select,
-        deselection = Selectr.prototype.deselect;
-      var ours = document.createElement('div');
-      ours.className = SS.selected.className;
-      SS.selected.className += ' selectr-selected--hidden';
-      SS.selected.parentNode.insertBefore(ours,SS.selected);
-      var updateOurs = function(){
-        ours.innerText = SS.selected.innerText.trim().replace(/\n/g, ', ') || placeholder;
+        placeholder: placeholder,
+        data: selects[i].dataset['categories'].split(`,`)
+          .map((id, index) => ({
+            value: id,
+            text: selects[i].dataset['titles'].split(`,`)[index],
+            selected: selects[i].dataset['active'].split(`,`).includes(id)
+          })),
+        selectedValue: selects[i].dataset['active'].split(`,`)
       };
-      Selectr.prototype.select = function(){
-        selection.apply(this, arguments);
-        updateOurs();
-      };
-
-      Selectr.prototype.deselect = function(){
-        deselection.apply(this, arguments);
-        updateOurs();
-      };
-      updateOurs();
+      const SS = new Selectr(selects[i], selectrConfig);
     }
 
     var priceField = form.querySelector('.js-price');
@@ -180,6 +201,298 @@
       search.classList.remove('search--active');
     });
   }
+})();
+
+// create comment
+'use strict';
+
+(function () {
+  const commentForm = document.forms[`comment`];
+  if (!commentForm) {
+    return;
+  }
+
+  const textField = commentForm.querySelector(`textarea`);
+
+  commentForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    cleanForm(commentForm);
+    const offerId = commentForm.dataset.offer;
+    setFormDisabled(commentForm, true);
+
+    fetch(`http://localhost:3000/api/offers/${offerId}/comments`, {
+      method: `POST`,
+      body: JSON.stringify({text: textField.value.trim()}),
+      headers: new Headers({'Content-Type': `application/json`})
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error();
+        }
+      })
+      .then(() => location.reload(true))
+      .catch(() => {
+        commentForm.style.animation = `shake 0.6s`;
+        setFormDisabled(commentForm, false);
+      })
+  });
+})();
+
+// login
+'use strict';
+
+(function () {
+  const loginForm = document.forms[`login`];
+  if (!loginForm) {
+    return;
+  }
+
+  const emailField = loginForm.querySelector(`[type=email]`);
+  const passwordField = loginForm.querySelector(`[type=password]`);
+
+  loginForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    cleanForm(loginForm);
+    setFormDisabled(loginForm, true);
+
+    fetch(`http://localhost:3000/api/login`, {
+      method: `POST`,
+      body: JSON.stringify({
+        email: emailField.value.trim(),
+        password: passwordField.value
+      }),
+      headers: new Headers({'Content-Type': `application/json`})
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error();
+        }
+      })
+      .then(() => location.reload(true))
+      .catch(() => {
+        loginForm.style.animation = `shake 0.6s`;
+        setFormDisabled(loginForm, false);
+      })
+  });
+})();
+
+//  sign-up
+'use strict';
+
+(function () {
+  const signUpForm = document.forms[`sign-up`];
+  if (!signUpForm) {
+    return;
+  }
+
+  const passwordField = signUpForm.querySelector(`[name=user-password]`);
+  const passwordAgainField = signUpForm.querySelector(`[name=user-password-again]`);
+  const avatarInput = signUpForm.querySelector(`[name=avatar]`);
+
+  signUpForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    cleanForm(signUpForm);
+
+    if (passwordField.value !== passwordAgainField.value) {
+      createPasswordError(signUpForm);
+      return;
+    }
+
+    const correctFileTypes = [`image/png`, `image/jpeg`];
+    if (!correctFileTypes.includes(avatarInput.files[0].type)) {
+      createAvatarError(signUpForm);
+      return;
+    }
+
+    const formData = new FormData(signUpForm);
+    setFormDisabled(signUpForm, true);
+
+    fetch(`http://localhost:3000/api/register`, {
+      method: `POST`,
+      body: formData
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error();
+        }
+      })
+      .then(() => location.assign(`/login`))
+      .catch(() => {
+        signUpForm.style.animation = `shake 0.6s`;
+        setFormDisabled(signUpForm, false);
+      })
+  });
+})();
+
+//  offer add
+'use strict';
+
+(function () {
+  const addForm = document.forms[`add`];
+  if (!addForm) {
+    return;
+  }
+
+  const avatarInput = addForm.querySelector(`[name=avatar]`);
+
+  addForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    cleanForm(addForm);
+
+    const correctFileTypes = [`image/png`, `image/jpeg`];
+    if (!correctFileTypes.includes(avatarInput.files[0].type)) {
+      createAvatarError(addForm);
+      return;
+    }
+
+    const selectedOptions = addForm.querySelectorAll(`[selected]`);
+    const categories = Array.prototype.map.call(selectedOptions, (option) => option.value);
+    const oldFormData = new FormData(addForm);
+    const formData = new FormData();
+    formData.append(`title`, oldFormData.get(`ticket-name`));
+    formData.append(`description`, oldFormData.get(`comment`));
+    formData.append(`type`, oldFormData.get(`action`));
+    formData.append(`sum`, oldFormData.get(`price`));
+    formData.append(`category`, categories);
+    formData.append(`avatar`, oldFormData.get(`avatar`))
+    setFormDisabled(addForm, true);
+
+    fetch(`http://localhost:3000/api/offers`, {
+      method: `POST`,
+      body: formData
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error();
+        }
+      })
+      .then(() => location.assign(`/my`))
+      .catch(() => {
+        addForm.style.animation = `shake 0.6s`;
+        setFormDisabled(addForm, false);
+      });
+  });
+})();
+
+//  offer edit
+'use strict';
+
+(function () {
+  const editForm = document.forms[`edit`];
+  if (!editForm) {
+    return;
+  }
+  editForm.querySelector(`[type=submit]`).removeAttribute(`disabled`);
+  const avatarInput = editForm.querySelector(`[name=avatar]`);
+
+  editForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    cleanForm(editForm);
+
+    const correctFileTypes = [`image/png`, `image/jpeg`];
+    if (avatarInput.files[0] && !correctFileTypes.includes(avatarInput.files[0].type)) {
+      createAvatarError(editForm);
+      return;
+    }
+
+    const oldFormData = new FormData(editForm);
+    const isAvatarChanged = avatarInput.files[0];
+    const selectedOptions = editForm.querySelectorAll(`[selected]`);
+    const categories = Array.prototype.map.call(selectedOptions, (option) => option.value);
+
+    const formData = new FormData();
+    formData.append(`title`, oldFormData.get(`ticket-name`));
+    formData.append(`description`, oldFormData.get(`comment`));
+    formData.append(`type`, oldFormData.get(`action`));
+    formData.append(`sum`, oldFormData.get(`price`));
+    formData.append(`category`, categories);
+    if (isAvatarChanged) {
+      formData.append(`avatar`, oldFormData.get(`avatar`))
+    }
+
+    setFormDisabled(editForm, true);
+    const offerId = editForm.dataset['offer'];
+    fetch(`http://localhost:3000/api/offers/${offerId}`, {
+      method: `PUT`,
+      body: formData
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error();
+        }
+      })
+      .then(() => location.assign(`/my`))
+      .catch(() => {
+        editForm.style.animation = `shake 0.6s`;
+        setFormDisabled(editForm, false);
+      });
+  });
+})();
+
+//  helpers
+'use strict';
+
+(function () {
+  window.setFormDisabled = (form, status) => {
+    const inputs = form.querySelectorAll(`input`);
+    const textArea = form.querySelector(`textarea`);
+    const select = form.querySelector(`select`);
+
+    if (status) {
+      form.setAttribute(`disabled`, `disabled`);
+    } else {
+      form.removeAttribute(`disabled`);
+    }
+
+    if (textArea && status) {
+      textArea.setAttribute(`disabled`, `disabled`);
+    } else if (textArea && !status) {
+      textArea.removeAttribute(`disabled`);
+    }
+
+    if (select && status) {
+      select.setAttribute(`disabled`, `disabled`);
+    } else if (select && !status) {
+      select.removeAttribute(`disabled`);
+    }
+
+    if (inputs.length) {
+      inputs.forEach((input) => {
+        if (status) {
+          input.setAttribute(`disabled`, `disabled`);
+        } else {
+          input.removeAttribute(`disabled`);
+        }
+      })
+    }
+  };
+
+  window.createPasswordError = (form) => {
+    const errorMessage = document.createElement(`p`);
+    errorMessage.classList.add(`text`, `text--error`);
+    errorMessage.innerText = `Пароли должны совпадать`;
+    form.querySelectorAll(`[type=password]`).forEach((input) => {
+      input.parentElement.classList.add(`field--error`);
+    });
+    form.insertBefore(errorMessage, form.lastElementChild);
+  };
+
+  window.createAvatarError = (form) => {
+    const errorMessage = document.createElement(`p`);
+    errorMessage.classList.add(`text`, `text--error`);
+    errorMessage.innerText = `Допустимые расширения файла .jpeg, .jpg, .png`;
+    form.insertBefore(errorMessage, form.querySelector(`[type=file]`).parentElement.parentElement);
+  };
+
+  window.cleanForm = (form) => {
+    form.style.animation = ``;
+    form
+      .querySelectorAll(`.text--error`)
+      .forEach((message) => form.removeChild(message));
+    form
+      .querySelectorAll(`input`)
+      .forEach((input) => input.parentElement.classList.remove(`field--error`));
+  };
 })();
 
 //# sourceMappingURL=main.js.map
