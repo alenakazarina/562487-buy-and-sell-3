@@ -81,14 +81,18 @@ const postOfferData = {
   'type': `offer`,
   'description': `Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.`,
   'sum': `5151`,
-  'category': [`1`]
+  'category': [`1`],
+  'picture': `offer.jpg`,
+  'pictureSrcset': `offer@2x.jpg`
 };
 
 const postOfferFalseData = {
   'title': `Sony Playstation 5.`,
   'type': `offer`,
   'description': `Заберу сам 🚚... Только в рабочем состоянии 🙏🏽.`,
-  'sum': `5151`
+  'sum': `5151`,
+  'picture': `offer.jpg`,
+  'pictureSrcset': `offer@2x.jpg`
 };
 
 const postCommentData = {

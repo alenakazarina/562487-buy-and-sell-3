@@ -44,6 +44,10 @@ const getAllComments = (offers) => {
   return offers.reduce((acc, it) => acc.concat(...it.comments), []);
 };
 
+const getCategoriesFromIds = (categories, ids) => {
+  return categories.filter((category) => ids.includes(category.id));
+};
+
 module.exports = {
   sortByDate,
   sortPopular,
@@ -55,5 +59,6 @@ module.exports = {
   getNewOffers,
   getPopularOffers,
   getOfferByCommentId,
-  getAllComments
+  getAllComments,
+  getCategoriesFromIds
 };

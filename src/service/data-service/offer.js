@@ -1,6 +1,7 @@
 'use strict';
 
 const Offer = require(`../models/offer`);
+const {getCategoriesFromIds} = require(`../../express/helpers`);
 
 class OfferService {
   constructor(offers, categories) {
@@ -19,7 +20,8 @@ class OfferService {
   }
 
   create(offer) {
-    const newOffer = new Offer(offer, this._categories);
+    offer.category = getCategoriesFromIds(this._categories, offer.category);
+    const newOffer = new Offer(offer);
     this._offers.push(newOffer);
     return newOffer;
   }
@@ -38,9 +40,10 @@ class OfferService {
     return this._offers.find((offer) => offer.id === offerId);
   }
 
-  update(offerId, updateOffer) {
-    const index = this._offers.findIndex((offer) => offer.id === offerId);
-    const updatedOffer = new Offer(Object.assign(this._offers[index], updateOffer), this._categories);
+  update(updateData) {
+    const index = this._offers.findIndex((offer) => offer.id === updateData.id);
+    updateData.category = getCategoriesFromIds(this._categories, updateData.category);
+    const updatedOffer = new Offer(updateData);
     this._offers[index] = updatedOffer;
     return updatedOffer;
   }

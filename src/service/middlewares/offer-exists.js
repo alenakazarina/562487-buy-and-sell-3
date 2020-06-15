@@ -2,12 +2,12 @@
 
 module.exports = (service) => (req, res, next) => {
   const {offerId} = req.params;
-  const offer = service.getOne(offerId);
+  const dbOffer = service.getOne(offerId);
 
-  if (!offer) {
-    res.locals.offer = null;
+  if (!dbOffer) {
+    res.locals.dbOffer = null;
   } else {
-    res.locals.offer = offer;
+    res.locals.dbOffer = dbOffer;
   }
   next();
 };

@@ -1,8 +1,7 @@
 'use strict';
 
 module.exports = {
-  PORT: process.env.PORT || 3000,
-  PORT_CLIENT: process.env.PORT_CLIENT || 8080,
+  PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
   LOG_LEVEL: process.env.LOG_LEVEL
 };

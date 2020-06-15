@@ -3,12 +3,21 @@
 const {Router} = require(`express`);
 const commonController = require(`../controller/common`);
 const authController = require(`../controller/auth`);
+const getAppUser = require(`../middlewares/get-app-user`);
+const getOffers = require(`../middlewares/get-offers`);
+const getCategories = require(`../middlewares/get-categories`);
+const getSearch = require(`../middlewares/get-search`);
 
 const route = new Router();
 
-route.get(`/`, commonController.renderIndex);
-route.get(`/register`, authController.renderSignUp);
-route.get(`/login`, authController.renderLogin);
-route.get(`/search`, commonController.renderSearch);
+module.exports = (service) => {
+  route.get(`/`, getAppUser(service), getOffers(service), getCategories(service), commonController.renderIndex);
 
-module.exports = route;
+  route.get(`/register`, getAppUser(service), authController.renderSignUp);
+
+  route.get(`/login`, getAppUser(service), authController.renderLogin);
+
+  route.get(`/search`, getAppUser(service), getOffers(service), getSearch(service), commonController.renderSearch);
+
+  return route;
+};

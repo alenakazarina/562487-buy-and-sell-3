@@ -1,12 +1,9 @@
 'use strict';
 
-const fs = require(`fs`).promises;
 const {HttpCode} = require(`../../const`);
 const offerExists = require(`../../middlewares/offer-exists`);
 const offerValidator = require(`../../middlewares/offer-validator`);
-const updateValidator = require(`../../middlewares/update-validator`);
-const uploadPicture = require(`../../middlewares/upload-picture`);
-const processPicture = require(`../../utils/process-picture`);
+const getUser = require(`../../middlewares/get-current-user`);
 const endRequest = require(`../../logger/end-request`);
 
 const Routes = {
@@ -26,82 +23,68 @@ module.exports = (app, dataService) => {
     endRequest(req.method, req.originalUrl, res.statusCode);
   });
 
-  app.post(Routes.OFFER_ROOT, uploadPicture(`avatar`), offerValidator, async (req, res) => {
-    const {offer} = res.locals;
-
-    if (!offer) {
-      if (req.file) {
-        await fs.unlink(req.file.path);
-      }
+  app.post(Routes.OFFER_ROOT, getUser(userService), offerValidator, async (req, res) => {
+    const {currentUser, offerData} = res.locals;
+    if (!offerData) {
       res.sendStatus(HttpCode.BAD_REQUEST);
     } else {
-      const currentUser = userService.getCurrentUser();
       const newOffer = offerService.create(
-          Object.assign(offer, {user: currentUser})
+          Object.assign(offerData, {user: currentUser})
       );
 
-      if (req.file) {
-        await processPicture({
-          picture: req.file.filename,
-          width: 482,
-          height: 598
-        });
+      if (newOffer) {
+        res.status(HttpCode.CREATED)
+          .json(newOffer);
+      } else {
+        res.sendStatus(HttpCode.BAD_REQUEST);
       }
-
-      res.status(HttpCode.CREATED)
-        .json(newOffer);
     }
 
     endRequest(req.method, req.originalUrl, res.statusCode);
   });
 
-  app.put(Routes.OFFER, uploadPicture(`avatar`), offerExists(offerService), updateValidator, async (req, res) => {
-    const {offerId} = req.params;
-    const offerData = res.locals.offer;
-
-    if (!offerData) {
+  app.put(Routes.OFFER, getUser(userService), offerValidator, offerExists(offerService), async (req, res) => {
+    const {currentUser, offerData, dbOffer} = res.locals;
+    if (!offerData || !dbOffer) {
       res.sendStatus(HttpCode.BAD_REQUEST);
     } else {
-      const updatedOffer = offerService.update(offerId, offerData);
-
-      if (req.file) {
-        await processPicture({
-          picture: req.file.filename,
-          width: 482,
-          height: 598
-        });
+      if (!offerData.picture) {
+        offerData.picture = dbOffer.picture;
+        offerData.pictureSrcset = dbOffer.pictureSrcset;
       }
-
-      res.status(HttpCode.OK)
-        .json(updatedOffer);
+      const updateData = Object.assign(dbOffer, offerData, {
+        user: currentUser
+      });
+      const updatedOffer = offerService.update(updateData);
+      res.json(updatedOffer);
     }
 
     endRequest(req.method, req.originalUrl, res.statusCode);
   });
 
   app.get(Routes.OFFER, offerExists(offerService), (req, res) => {
-    const {offer} = res.locals;
+    const {dbOffer} = res.locals;
 
-    if (!offer) {
+    if (!dbOffer) {
       res.sendStatus(HttpCode.NOT_FOUND);
     } else {
       res.status(HttpCode.OK)
-        .json(offer);
+        .json(dbOffer);
     }
 
     endRequest(req.method, req.originalUrl, res.statusCode);
   });
 
   app.delete(Routes.OFFER, offerExists(offerService), (req, res) => {
-    const {offer} = res.locals;
+    const {dbOffer} = res.locals;
 
-    if (!offer) {
+    if (!dbOffer) {
       res.sendStatus(HttpCode.NOT_FOUND);
     } else {
-      const droppedOffer = offerService.drop(offer.id);
+      const droppedOffer = offerService.drop(dbOffer.id);
       commentService.deleteOfferComments(droppedOffer.id);
       res.status(HttpCode.OK)
-        .json(offer);
+        .json(dbOffer);
     }
 
     endRequest(req.method, req.originalUrl, res.statusCode);

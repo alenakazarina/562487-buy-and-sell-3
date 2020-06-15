@@ -1,6 +1,5 @@
 'use strict';
 
-const dataService = require(`../data-service`);
 const {sortByDate, getOffersByUserId, getOffersWithComments,
   getOfferByCommentId, getAllComments} = require(`../helpers`);
 const {COMMENTS_PAGE_OFFERS_COUNT} = require(`../const`);
@@ -26,34 +25,31 @@ const getCommentsPageOffers = (offers) => {
 };
 
 module.exports = {
-  renderMyOffers: async (req, res, next) => {
-    const user = res.locals.appUser;
-    if (!user) {
+  renderMyOffers: (req, res) => {
+    const {dbUser, dbOffers} = res.locals;
+    if (!dbUser) {
       return res.redirect(`/login`);
     }
-    const dbOffers = await dataService.getOffers(next);
-    const userOffers = getOffersByUserId(dbOffers, user.id);
 
     return res.render(`my-tickets`, {
       page: `my-tickets`,
-      appUser: user,
-      offers: sortByDate(userOffers)
+      appUser: dbUser,
+      offers: sortByDate(getOffersByUserId(dbOffers, dbUser.id))
     });
   },
 
-  renderMyComments: async (req, res, next) => {
-    const user = res.locals.appUser;
-    if (!user) {
+  renderMyComments: (req, res) => {
+    const {dbUser, dbOffers} = res.locals;
+    if (!dbUser) {
       return res.redirect(`/login`);
     }
+
     const pageContent = {
       page: `comments`,
-      appUser: user,
+      appUser: dbUser,
       offers: []
     };
-
-    const dbOffers = await dataService.getOffers(next);
-    const userOffers = getOffersByUserId(dbOffers, user.id);
+    const userOffers = getOffersByUserId(dbOffers, dbUser.id);
     const userOffersWithComments = getOffersWithComments(userOffers);
 
     if (userOffersWithComments.length === 0) {

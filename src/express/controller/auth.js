@@ -2,7 +2,7 @@
 
 module.exports = {
   renderSignUp: (req, res) => {
-    if (res.locals.appUser) {
+    if (res.locals.dbUser) {
       return res.redirect(`/`);
     }
     return res.render(`sign-up`, {
@@ -10,8 +10,8 @@ module.exports = {
     });
   },
 
-  renderLogin: async (req, res) => {
-    if (res.locals.appUser) {
+  renderLogin: (req, res) => {
+    if (res.locals.dbUser) {
       return res.redirect(`/`);
     }
     return res.render(`login`, {

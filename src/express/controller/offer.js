@@ -1,53 +1,96 @@
 'use strict';
 
 const {sortByDate} = require(`../helpers`);
-const dataService = require(`../data-service`);
+const processPicture = require(`../../service/utils/process-picture`);
 const {DEFAULT_OFFER} = require(`../const`);
 
 module.exports = {
-  renderOffer: async (req, res, next) => {
-    const pageOffer = await dataService.getOffer(req.params.offerId, next);
+  renderOffer: (req, res) => {
+    const {dbUser, dbOffer} = res.locals;
 
     return res.render(`ticket`, {
       page: `ticket`,
-      appUser: res.locals.appUser,
-      offer: pageOffer,
-      comments: pageOffer.comments.length ? sortByDate(pageOffer.comments) : [],
-      categories: pageOffer.category
+      appUser: dbUser,
+      offer: dbOffer,
+      comments: dbOffer.comments.length ? sortByDate(dbOffer.comments) : [],
+      categories: dbOffer.category
     });
   },
 
-  renderOfferAdd: async (req, res, next) => {
-    const user = res.locals.appUser;
-    if (!user) {
+  renderOfferAdd: (req, res) => {
+    const {dbUser, dbCategories} = res.locals;
+    if (!dbUser) {
       return res.redirect(`/login`);
     }
 
-    const dbCategories = await dataService.getCategories(next);
-
     return res.render(`new-ticket`, {
       page: `new-ticket`,
-      appUser: user,
+      appUser: dbUser,
       categories: dbCategories,
       offer: DEFAULT_OFFER
     });
   },
 
-  renderOfferEdit: async (req, res, next) => {
-    const {offerId} = req.params;
-    const user = res.locals.appUser;
-    if (!user) {
+  postOfferAdd: async (req, res) => {
+    const {newOffer} = res.locals;
+    if (!newOffer) {
+      const {userOffer, dbUser, dbCategories} = res.locals;
+      return res.render(`new-ticket`, {
+        page: `new-ticket`,
+        appUser: dbUser,
+        categories: dbCategories,
+        offer: userOffer,
+        isError: true
+      });
+    }
+
+    if (req.file) {
+      await processPicture({
+        picture: req.file.filename,
+        width: 482,
+        height: 598
+      });
+    }
+
+    return res.redirect(`/my`);
+  },
+
+  renderOfferEdit: (req, res) => {
+    const {dbUser, dbOffer, dbCategories} = res.locals;
+    if (!dbUser) {
       return res.redirect(`/login`);
     }
 
-    const dbCategories = await dataService.getCategories(next);
-    const dbOffer = await dataService.getOffer(offerId, next);
-
     return res.render(`ticket-edit`, {
       page: `ticket-edit`,
-      appUser: user,
+      appUser: dbUser,
       categories: dbCategories,
       offer: dbOffer
     });
-  }
+  },
+
+  postOfferEdit: async (req, res) => {
+    const {updatedOffer} = res.locals;
+
+    if (!updatedOffer) {
+      const {userOffer, dbUser, dbCategories} = res.locals;
+      return res.render(`ticket-edit`, {
+        page: `ticket-edit`,
+        appUser: dbUser,
+        categories: dbCategories,
+        offer: userOffer,
+        isError: true
+      });
+    }
+
+    if (req.file) {
+      await processPicture({
+        picture: req.file.filename,
+        width: 482,
+        height: 598
+      });
+    }
+
+    return res.redirect(`/my`);
+  },
 };
