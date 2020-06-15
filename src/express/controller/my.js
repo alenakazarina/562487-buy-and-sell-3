@@ -2,7 +2,7 @@
 
 const {sortByDate, getOffersByUserId, getOffersWithComments,
   getOfferByCommentId, getAllComments} = require(`../helpers`);
-const {COMMENTS_PAGE_OFFERS_COUNT} = require(`../const`);
+const {COMMENTS_PAGE_COUNT} = require(`../const`);
 
 const getUniqueOffersFromComments = (comments, offers) => {
   return comments.reduce((acc, it) => {
@@ -17,7 +17,7 @@ const getUniqueOffersFromComments = (comments, offers) => {
 
 const getCommentsPageOffers = (offers) => {
   return offers
-    .slice(0, COMMENTS_PAGE_OFFERS_COUNT)
+    .slice(0, COMMENTS_PAGE_COUNT)
     .map((offer) => {
       offer.comments = sortByDate(offer.comments);
       return offer;
