@@ -3,7 +3,8 @@
 const {unlink} = require(`fs`).promises;
 const {getCategoriesFromIds} = require(`../helpers`);
 
-module.exports = (service) => async (req, res, next) => {
+module.exports = async (req, res, next) => {
+  const service = req.app.locals.service;
   const {offerId} = req.params;
   const {offerData} = res.locals;
 

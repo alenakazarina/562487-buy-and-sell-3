@@ -22,15 +22,15 @@ module.exports = {
   run: (userPort) => {
     const port = userPort || PORT;
 
-    const fetchDataService = axios.create({
+    const app = express();
+    app.locals.title = `Куплю Продам`;
+    app.locals.description = `Доска объявлений — современный веб-сайт, упрощающий продажу или покупку абсолютно любых вещей.`;
+
+    app.locals.service = axios.create({
       baseURL: `http://localhost:${port}/api`,
       timeout: 1000 * 5,
       withCredentials: true
     });
-
-    const app = express();
-    app.locals.title = `Куплю Продам`;
-    app.locals.description = `Доска объявлений — современный веб-сайт, упрощающий продажу или покупку абсолютно любых вещей.`;
 
     app.use(express.static(path.resolve(__dirname, STATIC_DIR)));
     app.use(express.json());
@@ -38,7 +38,7 @@ module.exports = {
     app.set(`view engine`, `pug`);
     app.use(setHeaders);
     app.use(startRequest);
-    app.use(`/`, clientRoutes(fetchDataService));
+    app.use(`/`, clientRoutes);
     app.use(`/api`, apiRoutes);
     app.use(handleNotFound);
     app.use(handleError);

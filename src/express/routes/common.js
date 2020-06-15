@@ -10,14 +10,9 @@ const getSearch = require(`../middlewares/get-search`);
 
 const route = new Router();
 
-module.exports = (service) => {
-  route.get(`/`, getAppUser(service), getOffers(service), getCategories(service), commonController.renderIndex);
+route.get(`/`, getAppUser, getOffers, getCategories, commonController.renderIndex);
+route.get(`/register`, getAppUser, authController.renderSignUp);
+route.get(`/login`, getAppUser, authController.renderLogin);
+route.get(`/search`, getAppUser, getOffers, getSearch, commonController.renderSearch);
 
-  route.get(`/register`, getAppUser(service), authController.renderSignUp);
-
-  route.get(`/login`, getAppUser(service), authController.renderLogin);
-
-  route.get(`/search`, getAppUser(service), getOffers(service), getSearch(service), commonController.renderSearch);
-
-  return route;
-};
+module.exports = route;

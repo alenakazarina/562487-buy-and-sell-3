@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = (service) => async (req, res, next) => {
+module.exports = async (req, res, next) => {
+  const service = req.app.locals.service;
+
   try {
     const offers = await service.get(`/offers`);
     res.locals.dbOffers = offers.data;

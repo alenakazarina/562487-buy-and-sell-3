@@ -7,9 +7,8 @@ const offersRouter = require(`./offers`);
 
 const app = new Router();
 
-module.exports = (service) => {
-  app.use(`/`, commonRouter(service));
-  app.use(`/offers`, offersRouter(service));
-  app.use(`/my`, myRouter(service));
-  return app;
-};
+app.use(`/`, commonRouter);
+app.use(`/offers`, offersRouter);
+app.use(`/my`, myRouter);
+
+module.exports = app;

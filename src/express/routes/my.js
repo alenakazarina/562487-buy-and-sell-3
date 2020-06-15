@@ -7,10 +7,7 @@ const getOffers = require(`../middlewares/get-offers`);
 
 const route = new Router();
 
-module.exports = (service) => {
-  route.get(`/`, getAppUser(service), getOffers(service), myController.renderMyOffers);
+route.get(`/`, getAppUser, getOffers, myController.renderMyOffers);
+route.get(`/comments`, getAppUser, getOffers, myController.renderMyComments);
 
-  route.get(`/comments`, getAppUser(service), getOffers(service), myController.renderMyComments);
-
-  return route;
-};
+module.exports = route;

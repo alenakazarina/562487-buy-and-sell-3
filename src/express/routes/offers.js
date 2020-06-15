@@ -14,18 +14,11 @@ const offerEdit = require(`../middlewares/offer-edit`);
 
 const route = new Router();
 
-module.exports = (service) => {
-  route.get(`/category/:categoryId`, getAppUser(service), getOffers(service), getCategories(service), commonController.renderCategory);
+route.get(`/category/:categoryId`, getAppUser, getOffers, getCategories, commonController.renderCategory);
+route.get(`/add`, getAppUser, getCategories, offerController.renderOfferAdd);
+route.post(`/add`, getAppUser, uploadPicture(`avatar`), setOfferData, offerAdd, offerController.postOfferAdd);
+route.get(`/edit/:offerId`, getAppUser, getOffer, getCategories, offerController.renderOfferEdit);
+route.post(`/edit/:offerId`, getAppUser, uploadPicture(`avatar`), setOfferData, offerEdit, offerController.postOfferEdit);
+route.get(`/:offerId`, getAppUser, getOffer, offerController.renderOffer);
 
-  route.get(`/add`, getAppUser(service), getCategories(service), offerController.renderOfferAdd);
-
-  route.post(`/add`, getAppUser(service), uploadPicture(`avatar`), setOfferData, offerAdd(service), offerController.postOfferAdd);
-
-  route.get(`/edit/:offerId`, getAppUser(service), getOffer(service), getCategories(service), offerController.renderOfferEdit);
-
-  route.post(`/edit/:offerId`, getAppUser(service), uploadPicture(`avatar`), setOfferData, offerEdit(service), offerController.postOfferEdit);
-
-  route.get(`/:offerId`, getAppUser(service), getOffer(service), offerController.renderOffer);
-
-  return route;
-};
+module.exports = route;
